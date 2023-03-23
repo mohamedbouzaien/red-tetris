@@ -7,15 +7,44 @@ import { StyledInputLabel } from "./styles/StyledInputLabel";
 import { StyledInputDiv } from "./styles/StyledInputDiv";
 import { StyledLogo } from "./styles/StyledLogo";
 import { StyledLogoWrapper } from "./styles/StyledLogoWrapper";
-
-const SignUpForm = () => {
+import { StyledErrorMessage } from "./styles/StyledErrorMessage";
+import io from "socket.io-client";
+const socket = io.connect("http://localhost:3004");
+const SignUpForm = ({ history }) => {
     const [inputs, setInputs] = useState({
         room: "",
-        nickname: ""
+        nickname: "",
+        message: ""
     });
-    const { room, nickname } = inputs;
-    const handleSubmit = () => {
-
+    const { room, nickname, message } = inputs;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await fetch("http://localhost:3004/api/room", {
+            method: "POST",
+            body: JSON.stringify({
+                room,
+                nickname
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then((res) =>
+            res.json()
+        ).then((result) => {
+            if (result.error) {
+                setInputs({
+                    room : room,
+                    nickname: nickname,
+                    message: result.error
+                });
+                console.log(inputs.message);
+            } else {
+                socket.emit("join_room", room);
+                history.push(`/${room}[${nickname}]`);
+            }
+        }).catch((error) => {
+            console.error("Error:", error);
+        })
     }
 
     const handleChange = (e) => {
@@ -46,8 +75,9 @@ const SignUpForm = () => {
                         <StyledInput type="text" name="nickname" value={nickname} onChange= { handleChange }/>
                     </StyledInputDiv>
                     <StyledInputDiv>
-                        <StyledSignupButton type="submit" value="Submit" />
+                        <StyledSignupButton type="submit" value="Start" />
                     </StyledInputDiv>
+                    <StyledErrorMessage message={message}> {message} </StyledErrorMessage>
                 </form>
             </StyledFormWrapper>
         </StyledTetrisWrapper>

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledSignupButton = styled.input`
     box-sizing: border-box;
-    margin: 0 0 20px 15px;
+    margin: 15px 0px 20px 15px;
     padding: 20px;
     min-height: 30px;
     width: 100%;

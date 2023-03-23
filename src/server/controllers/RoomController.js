@@ -13,7 +13,7 @@ const RoomController = {
             }
             if (room.players.size >= 3) {
                 return res.status(403).json({
-                    error: `${room.name} is full! Go away!`
+                    error: `${name} is full! Go away!`
                 })
             }
             room.players.set(nickname, nickname);
