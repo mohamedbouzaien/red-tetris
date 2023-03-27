@@ -9,6 +9,7 @@ import { StyledLogo } from "./styles/StyledLogo";
 import { StyledLogoWrapper } from "./styles/StyledLogoWrapper";
 import { StyledErrorMessage } from "./styles/StyledErrorMessage";
 import io from "socket.io-client";
+import Chat from "./Chat";
 const socket = io.connect("http://localhost:3004");
 const SignUpForm = ({ history }) => {
     const [inputs, setInputs] = useState({
@@ -40,7 +41,7 @@ const SignUpForm = ({ history }) => {
                 console.log(inputs.message);
             } else {
                 socket.emit("join_room", room);
-                history.push(`/${room}[${nickname}]`);
+                //history.push(`/${room}[${nickname}]`);
             }
         }).catch((error) => {
             console.error("Error:", error);
@@ -80,6 +81,7 @@ const SignUpForm = ({ history }) => {
                     <StyledErrorMessage message={message}> {message} </StyledErrorMessage>
                 </form>
             </StyledFormWrapper>
+            <Chat socket={socket} username={nickname} room={room} />
         </StyledTetrisWrapper>
     );
 }
