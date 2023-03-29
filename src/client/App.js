@@ -1,12 +1,12 @@
-import React,  { useState } from "react";
+import React,  { useContext, useState } from "react";
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { createRoom, setUsername, joinRoom } from './actions';
-import store  from "./store";
+
 import Tetris from './components/Tetris';
 import SignUpForm from "./components/SignUpForm";
 import { HashRouter, Route } from "react-router-dom";
 
-/*const App = () => (
+const App = () => (
   <div className="App">
     <HashRouter hashType="noslash">
         <Route path="/" exact component={SignUpForm} />
@@ -14,19 +14,29 @@ import { HashRouter, Route } from "react-router-dom";
     </HashRouter>
   </div>
 );
-export default App;*/
+/*
+export default App;
 function ChatRoom() {
   const [usernameInput, setUsernameInput] = useState("");
+  const [msgInput, setMsgInput] = useState("");
   const username = useSelector(state => state.username);
+  const room = useSelector(state => state.room);
+  const chats = useSelector(state => state.chatLog);
   const dispatch = useDispatch();
-
-  function enterRooom(){
+  const ws = useContext(WebSocketContext);
+  function enterRooom() {
       dispatch(setUsername(usernameInput));
-      console.log("Enter room function Chat component");
   }
-
+  const sendMessage = () => {
+    ws.sendMessage(room.id, {
+        username: username,
+        message: msgInput
+    });
+  }
+  console.log(chats);
   return (
       <div>
+        <h3>{room.name } ({room.id})</h3>
           {!username && 
           <div className="user">
               <input type="text" placeholder="Enter username" value={usernameInput} onChange={(e) => setUsernameInput(e.target.value)} />
@@ -35,10 +45,14 @@ function ChatRoom() {
           }
           {username &&
           <div className="room">
-              <div className="history"></div>
+              <div className="history" style={{width:"400px", border:"1px solid #ccc", height:"100px", textAlign: "left", padding: "10px", overflow: "scroll"}}>
+              {chats.map((c, i) => (
+                        <div key={i}><i>{c.username}:</i> {c.message}</div>
+                    ))}
+              </div>
               <div className="control">
-                  <input type="text" />
-                  <button>Send</button>
+                  <input type="text" value={msgInput} onChange={(e) => setMsgInput(e.target.value)}/>
+                  <button onClick={sendMessage}>Send</button>
               </div>
           </div>
           }
@@ -47,7 +61,7 @@ function ChatRoom() {
   )
 }
 
-function HomeComponent(){
+function HomeComponent() {
   const [roomName, setRoomName] = useState("");
   const [roomId, setRoomId] = useState("");
   const currentRoom = useSelector(state => state.room);
@@ -80,12 +94,12 @@ function HomeComponent(){
 
 function App() {
   return (
-      <Provider store={store}>
+
           <div className="App">
               <HomeComponent />
           </div>
-      </Provider>
+
   )
 }
-
+*/
 export default App;

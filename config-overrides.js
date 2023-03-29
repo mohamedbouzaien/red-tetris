@@ -1,3 +1,4 @@
+
 const paths = require('react-scripts/config/paths')
 
 const path = require('path')

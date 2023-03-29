@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-
 import Stage from "./Stage";
 import Display from "./Display";
 import StartButton from "./StartButton";
-
+import Chat from "./Chat";
+import store from "../store"
+import WebSocketProvider, { WebSocketContext } from '../webSocket';
+import { Provider } from "react-redux";
 import { StyledTetris, StyledTetrisWrapper } from "./styles/StyledTetris";
 import { usePlayer } from "../hooks/usePlayer";
 import { useStage } from "../hooks/useStage";
@@ -73,23 +75,28 @@ const Tetris = () => {
     }, dropTime);
 
     return (
-        <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={ e => move(e)}>
-            <StyledTetris>
-                <Stage stage={ stage }/>
-                <aside>
-                    {gameOver ? (
-                        <Display gameOver={gameOver} text="Game Over" />
-                    ) : (
-                    <div>
-                        <Display text="Score" />
-                        <Display text="Rows" />
-                        <Display text="Level" />
-                    </div>
-                    )}
-                    <StartButton callback={startGame}/>
-                </aside>
-            </StyledTetris>
-        </StyledTetrisWrapper>
+        <Provider store={store}>
+            <WebSocketProvider>
+                <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={ e => move(e)}>
+                    <StyledTetris>
+                        <Stage stage={ stage }/>
+                        <aside>
+                            {gameOver ? (
+                                <Display gameOver={gameOver} text="Game Over" />
+                            ) : (
+                            <div>
+                                <Display text="Score" />
+                                <Display text="Rows" />
+                                <Display text="Level" />
+                            </div>
+                            )}
+                            <StartButton callback={startGame}/>
+                        </aside>
+                    </StyledTetris>
+                    <Chat />
+                </StyledTetrisWrapper>
+            </WebSocketProvider>
+        </Provider>
     )
 }
 

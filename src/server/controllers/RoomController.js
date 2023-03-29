@@ -1,6 +1,7 @@
 const Room = require("../models/Room");
 
 const rooms = new Map();
+let chatLogs = {};
 const RoomController = {
     create: async (req, res) => {
         const { name, nickname } = req.body;
