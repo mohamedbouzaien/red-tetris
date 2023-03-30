@@ -5,20 +5,20 @@ import StartButton from "./StartButton";
 import Chat from "./Chat";
 import store from "../store"
 import WebSocketProvider, { WebSocketContext } from '../webSocket';
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { StyledTetris, StyledTetrisWrapper } from "./styles/StyledTetris";
 import { usePlayer } from "../hooks/usePlayer";
 import { useStage } from "../hooks/useStage";
 import { checkCollision, createStage } from "../gamehelpers";
 import { useInterval } from "../hooks/useInterval";
+import { joinRoom, setUsername } from "../actions";
 
-const Tetris = () => {
+const Tetris = ({history, match}) => {
     const [dropTime, setDropTime] = useState(null);
     const [gameOver, setGameOver] = useState(false);
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage] = useStage(player, resetPlayer);
     console.log('re-render');
-
     const movePlayer = dir => {
         if (!checkCollision(player, stage, {x: dir, y: 0})) {
             updatePlayerPos({
@@ -93,11 +93,11 @@ const Tetris = () => {
                             <StartButton callback={startGame}/>
                         </aside>
                     </StyledTetris>
-                    <Chat />
+                    <Chat history={history} match={match}/>
                 </StyledTetrisWrapper>
             </WebSocketProvider>
         </Provider>
     )
 }
 
-export default Tetris;
+export default React.memo(Tetris);

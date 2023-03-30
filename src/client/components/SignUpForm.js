@@ -8,6 +8,8 @@ import { StyledInputDiv } from "./styles/StyledInputDiv";
 import { StyledLogo } from "./styles/StyledLogo";
 import { StyledLogoWrapper } from "./styles/StyledLogoWrapper";
 import { StyledErrorMessage } from "./styles/StyledErrorMessage";
+import { setUsername } from "../actions";
+import { useDispatch } from "react-redux";
 const SignUpForm = ({ history }) => {
     const [inputs, setInputs] = useState({
         room: "",
@@ -20,7 +22,7 @@ const SignUpForm = ({ history }) => {
         await fetch("http://localhost:3004/api/room", {
             method: "POST",
             body: JSON.stringify({
-                room,
+                name: room,
                 nickname
             }),
             headers: {

@@ -29,7 +29,8 @@ export default function chatReducer(state, action) {
         
         case UPDATE_CHAT_LOG:
             console.log("got to UPDATE_CHAT_LOG reducer");
-            if (state.room !== null && action.update.roomId === state.room.id) {
+            console.log(state);
+            if (state.room !== null && action.update.roomId === state.room.name) {
                 state.chatLog = [...state.chatLog, action.update.data];
             }
             break;

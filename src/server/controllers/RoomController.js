@@ -1,7 +1,7 @@
 const Room = require("../models/Room");
 
 const rooms = new Map();
-let chatLogs = {};
+const chatLogs = new Map();
 const RoomController = {
     create: async (req, res) => {
         const { name, nickname } = req.body;
@@ -19,20 +19,29 @@ const RoomController = {
             }
             room.players.set(nickname, nickname);
             return res.status(200).json({
-                message: "user joined"
+                ...rooms.get(name),
+                chats: chatLogs.get(name)
             })
         } else {
+            const room = new Room(name);
+            room.players.set(nickname, nickname);
             rooms.set(name, new Room(name));
+            chatLogs.set(name, []);
             return res.status(200).json({
-                message: "room created"
+                ...rooms.get(name),
+                chats: chatLogs.get(name)
             });
         }
     },
 
     find: async (req, res) => {
         const { name, username } = req.query;
-        if (rooms.has(roomName)) {
-            return res.status(200).json(rooms.get(name));
+        console.log(rooms);
+        if (rooms.has(name)) {
+            return res.status(200).json({
+                ...rooms.get(name),
+                chats: chatLogs.get(name)
+            });
         } else {
             return res.status(403).json({
                 error: "Room does not exist"
@@ -40,4 +49,4 @@ const RoomController = {
         }
     }
 };
-module.exports = {rooms, RoomController};
+module.exports = {rooms, chatLogs, RoomController};

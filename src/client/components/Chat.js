@@ -1,8 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { WebSocketContext } from "../webSocket";
+import { joinRoom, setUsername } from "../actions";
 
-const Chat = ({socket, username, room}) => {
+const Chat = ({history, match}) => {
     const [currentMessage, setCurrentMessage] = useState("");
+    const { roomName, userName } = match.params;
+    //const username = useSelector(state => state.username);
+    //const room = useSelector(state => state.room);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(joinRoom(roomName, userName));
+        dispatch(setUsername(userName));
+    }, [])
+    const chats = useSelector(state => state.chatLog);
+    console.log(chats);
+    const ws = useContext(WebSocketContext);
     const sendMessage = async () => {
+      await ws.sendMessage(roomName, {
+          username: userName,
+          message: currentMessage
+      });
+    }
+    /*const sendMessage = async () => {
         if (currentMessage !== "") {
             const messageData = {
                 room: room,
@@ -14,28 +34,22 @@ const Chat = ({socket, username, room}) => {
             };
             await socket.emit("send_message", messageData);
         }
-    };
-    useEffect(() => {
-        socket.on("receive_message", (data) => {
-
-        });
-    }, [socket]);
+    };*/
     return (
-        <div>
-            <div>
-                <p style={{color:'white'}}>Live Chat</p>
+        <>{userName &&
+            <div className="room">
+                <div className="history" style={{width:"400px", border:"1px solid #ccc", height:"100px", textAlign: "left", padding: "10px", overflow: "scroll", backgroundColor:"white"}}>
+                {chats.map((c, i) => (
+                          <div key={i}><i>{c.username}:</i> {c.message}</div>
+                      ))}
+                </div>
+                <div className="control">
+                    <input type="text" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)}/>
+                    <button onClick={sendMessage}>&#9658;</button>
+                </div>
             </div>
-            <div>
-
-            </div>
-            <div>
-                <input type="text" placeholder="Hey..." 
-                onChange={(e) => {
-                    setCurrentMessage(e.target.value);
-                }}/>
-                <button onClick={sendMessage}>&#9658;</button>
-            </div>
-        </div>
+            }
+        </>
     );
 }
 export default Chat;

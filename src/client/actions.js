@@ -66,10 +66,10 @@ export function joinRoomError(error){
     }
 }
 
-export function joinRoom(roomId) {
+export function joinRoom(roomId, username) {
     return async function (dispatch) {
         dispatch(joinRoomRequest());
-        await fetch(`http://localhost:3004/room/${roomId}`, {
+        await fetch(`http://localhost:3004/api/room?name=${roomId}&username=${username}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
