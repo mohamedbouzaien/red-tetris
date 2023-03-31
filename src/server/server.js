@@ -22,4 +22,7 @@ io.on("connection", (socket) => {
     }
     socket.broadcast.emit('event://get-message', msg);
   });
+  socket.on("event://reset-player", () => {
+    
+  });
 });

@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { WebSocketContext } from "../webSocket";
 import { joinRoom, setUsername } from "../actions";
+import { StyledChatHistoryDiv } from "./styles/StyledChatHistoryDiv";
 
 const Chat = ({history, match}) => {
     const [currentMessage, setCurrentMessage] = useState("");
@@ -38,11 +39,11 @@ const Chat = ({history, match}) => {
     return (
         <>{userName &&
             <div className="room">
-                <div className="history" style={{width:"400px", border:"1px solid #ccc", height:"100px", textAlign: "left", padding: "10px", overflow: "scroll", backgroundColor:"white"}}>
-                {chats.map((c, i) => (
-                          <div key={i}><i>{c.username}:</i> {c.message}</div>
-                      ))}
-                </div>
+                <StyledChatHistoryDiv>
+                    {chats.map((c, i) => (
+                            <div key={i}><i>{c.username}:</i> {c.message}</div>
+                    ))}
+                </StyledChatHistoryDiv>
                 <div className="control">
                     <input type="text" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)}/>
                     <button onClick={sendMessage}>&#9658;</button>
