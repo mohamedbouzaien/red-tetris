@@ -26,20 +26,30 @@ io.on("connection", (socket) => {
     }
     socket.broadcast.emit('event://get-message', msg);
   });
+  socket.on("event://game-start", () => {
+    room.isStarted = true;
+    player.reset();
+    const payload = player;
+    socket.broadcast.emit("event://game-start", JSON.stringify(payload));
+  });
   socket.on("event://player-reset", () => {
-    const payload = player.reset();
+    player.reset();
+    const payload = player;
     socket.broadcast.emit('player-reset', JSON.stringify(payload));
   });
-  socket.on("event://start-game", (msg) => {
-    room.isStarted = true;
-    this.emit("event://start-game", {
-
-    });
-  });
-  socket.on("event://player-move", () => {
-
+  socket.on("event://player-move", ({ dir }) => {
+    player.move(dir);
+    const payload = player;
+    socket.broadcast.emit("event://player-move", JSON.stringify(payload));
   });
   socket.on("event://player-drop", () => {
-
+    player.drop();
+    const payload = player;
+    socket.broadcast.emit("event://player-drop", JSON.stringify(payload));
+  });
+  socket.on("event://player-rotate", ( { dir }) => {
+    player.playerRotate(dir);
+    const payload = player;
+    socket.broadcast.emit("event://player-rotate", JSON.stringify(payload));
   });
 });

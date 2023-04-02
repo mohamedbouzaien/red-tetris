@@ -1,4 +1,4 @@
-import { CREATE_ROOM_SUCCESS, JOIN_ROOM_SUCCESS, RESET_PLAYER, SET_USERNAME, UPDATE_CHAT_LOG } from './actions';
+import { CREATE_ROOM_SUCCESS, GAME_START, JOIN_ROOM_SUCCESS, PLAYER_MOVE, PLAYER_RESET, SET_USERNAME, UPDATE_CHAT_LOG, PLAYER_DROP, PLAYER_ROTATE } from './actions';
 
 const initialState = {
     room: null,
@@ -35,9 +35,26 @@ export default function chatReducer(state, action) {
                 state.chatLog = [...state.chatLog, action.update.data];
             }
             break;
-        case RESET_PLAYER:
+        case GAME_START:
+            console.log("got GAME_START reducer");
+            state.player = action.player;
+            break;
+        case PLAYER_RESET:
             console.log("got RESET_PLAYER reducer");
             state.player = action.player;
+            break;
+        case PLAYER_MOVE:
+            console.log("got PLAYER_MOVE reducer");
+            state.player = action.player;
+            break;
+        case PLAYER_DROP:
+            console.log("got PLAYER_DROP reducer");
+            state.player = action.player;
+            break;
+        case PLAYER_ROTATE:
+            console.log("got PLAYER_ROTATE reducer");
+            state.player = action.player;
+            break;
     }
     return state;
 }

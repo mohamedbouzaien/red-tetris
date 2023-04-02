@@ -1,16 +1,14 @@
-import React,  { useContext, useState } from "react";
-import { Provider, useSelector, useDispatch } from 'react-redux';
-import { createRoom, setUsername, joinRoom } from './actions';
-
-import Tetris from './components/Tetris';
+import React from "react";
 import SignUpForm from "./components/SignUpForm";
 import { HashRouter, Route } from "react-router-dom";
+import Game from "./components/Game";
+import Tetris from "./components/Tetris";
 
 const App = () => (
   <div className="App">
     <HashRouter hashType="noslash">
         <Route path="/" exact component={SignUpForm} />
-        <Route path="/:roomName[:userName]" component={Tetris} />
+        <Route path="/:roomName[:userName]" component={Game} />
     </HashRouter>
   </div>
 );

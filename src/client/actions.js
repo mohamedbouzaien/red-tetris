@@ -7,7 +7,11 @@ export const JOIN_ROOM_REQUEST = "JOIN_ROOM_REQUEST";
 export const JOIN_ROOM_SUCCESS = "JOIN_ROOM_SUCCESS";
 export const JOIN_ROOM_ERROR = "JOIN_ROOM_ERROR";
 export const SET_USERNAME = "SET_USERNAME";
-export const RESET_PLAYER = "RESET_PLAYER";
+export const GAME_START = "GAME_START";
+export const PLAYER_RESET = "PLAYER_RESET";
+export const PLAYER_MOVE = "PLAYER_MOVE";
+export const PLAYER_DROP = "PLAYER_DROP";
+export const PLAYER_ROTATE = "PLAYER_ROTATE";
 
 export function createRoomRequest() {
     return {
@@ -99,9 +103,37 @@ export function updateChatLog(update) {
     }
 }
 
-export function resetPlayer(player) {
+export function gameStartAction(player) {
     return {
-        type: RESET_PLAYER,
+        type: GAME_START,
+        player
+    }
+}
+
+export function playerResetAction(player) {
+    return {
+        type: PLAYER_RESET,
+        player
+    }
+}
+
+export function playerMoveAction(player) {
+    return {
+        type: PLAYER_MOVE,
+        player
+    }
+}
+
+export function playerDropAction(player) {
+    return {
+        type: PLAYER_DROP,
+        player
+    }
+}
+
+export function playerRotateAction(player) {
+    return {
+        type: PLAYER_ROTATE,
         player
     }
 }

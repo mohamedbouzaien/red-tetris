@@ -6,6 +6,7 @@ class Player {
     constructor () {
         this.reset();
         this.status = false; // to change to many statuses later
+        this.createStage();
     }
 
     reset() {
@@ -16,7 +17,6 @@ class Player {
         this.tetromnio= new Tetromino();
         this.tetromnio.random();
         this.collided = false;
-        this.createStage();
     }
 
     playerRotate(dir) {
@@ -50,7 +50,7 @@ class Player {
         }
     }
 
-    movePlayer(dir) {
+    move(dir) {
         if (!checkCollision({x: dir, y: 0})) {
             updatePlayerPos({
                 x: dir,
