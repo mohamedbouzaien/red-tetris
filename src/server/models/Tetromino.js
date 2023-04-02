@@ -68,7 +68,8 @@ class Tetromino {
         const tetrominos = 'IJLOSTZ';
         const randTetromino = 
             tetrominos[Math.floor(Math.random() * tetrominos.length)];
-        this = TETROMINOS[randTetromino];
+        this.shape = TETROMINOS[randTetromino].shape;
+        this.color = TETROMINOS[randTetromino].color;
     }
 }
 

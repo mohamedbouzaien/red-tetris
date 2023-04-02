@@ -7,6 +7,7 @@ export const JOIN_ROOM_REQUEST = "JOIN_ROOM_REQUEST";
 export const JOIN_ROOM_SUCCESS = "JOIN_ROOM_SUCCESS";
 export const JOIN_ROOM_ERROR = "JOIN_ROOM_ERROR";
 export const SET_USERNAME = "SET_USERNAME";
+export const RESET_PLAYER = "RESET_PLAYER";
 
 export function createRoomRequest() {
     return {
@@ -95,5 +96,12 @@ export function updateChatLog(update) {
     return {
         type: UPDATE_CHAT_LOG,
         update
+    }
+}
+
+export function resetPlayer(player) {
+    return {
+        type: RESET_PLAYER,
+        player
     }
 }

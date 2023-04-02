@@ -23,19 +23,6 @@ const Chat = ({history, match}) => {
           message: currentMessage
       });
     }
-    /*const sendMessage = async () => {
-        if (currentMessage !== "") {
-            const messageData = {
-                room: room,
-                author: username,
-                message: currentMessage,
-                time: new Date(Date.now()).getHours() + 
-                ":" + 
-                new Date(Date.now()).getMinutes()
-            };
-            await socket.emit("send_message", messageData);
-        }
-    };*/
     return (
         <>{userName &&
             <div className="room">

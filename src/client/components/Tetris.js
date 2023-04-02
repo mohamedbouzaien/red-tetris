@@ -5,7 +5,7 @@ import StartButton from "./StartButton";
 import Chat from "./Chat";
 import store from "../store"
 import WebSocketProvider, { WebSocketContext } from '../webSocket';
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { StyledTetris, StyledTetrisWrapper } from "./styles/StyledTetris";
 import { usePlayer } from "../hooks/usePlayer";
 import { useStage } from "../hooks/useStage";
@@ -18,6 +18,8 @@ const Tetris = ({history, match}) => {
     const [gameOver, setGameOver] = useState(false);
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage] = useStage(player, resetPlayer);
+    const resetedPlayer = useSelector(state =>state.player);
+    const dispatch = useDispatch();
     console.log('re-render');
     const movePlayer = dir => {
         if (!checkCollision(player, stage, {x: dir, y: 0})) {
@@ -31,7 +33,7 @@ const Tetris = ({history, match}) => {
     const startGame = () => {
         setStage(createStage());
         setDropTime(1000);
-        resetPlayer();
+        dispatch(resetPlayer());
         setGameOver(false);
     }
 

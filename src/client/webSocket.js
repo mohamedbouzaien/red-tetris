@@ -20,6 +20,10 @@ export default ({ children }) => {
         socket.emit("event://send-message", JSON.stringify(payload));
         dispatch(updateChatLog(payload));
     }
+
+    const sendResetPlayer = () => {
+        socket.emit("event://reset-player");
+    }
     useEffect(() => {
         if (!socket) {
             socket = io.connect("http://localhost:3004");

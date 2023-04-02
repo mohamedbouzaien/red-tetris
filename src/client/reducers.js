@@ -1,9 +1,10 @@
-import { CREATE_ROOM_SUCCESS, JOIN_ROOM_SUCCESS, SET_USERNAME, UPDATE_CHAT_LOG } from './actions';
+import { CREATE_ROOM_SUCCESS, JOIN_ROOM_SUCCESS, RESET_PLAYER, SET_USERNAME, UPDATE_CHAT_LOG } from './actions';
 
 const initialState = {
     room: null,
     chatLog: [],
-    username: null
+    username: null,
+    player: null
 }
 
 export default function chatReducer(state, action) {
@@ -34,6 +35,9 @@ export default function chatReducer(state, action) {
                 state.chatLog = [...state.chatLog, action.update.data];
             }
             break;
+        case RESET_PLAYER:
+            console.log("got RESET_PLAYER reducer");
+            state.player = action.player;
     }
     return state;
 }
