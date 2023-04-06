@@ -1,5 +1,5 @@
 const {server, app} = require('./App');
-const { chatLogs } = require('./controllers/RoomController');
+const { chatLogs, rooms } = require('./controllers/RoomController');
 const Player = require('./models/Player');
 const Room = require('./models/Room');
 const io = require("socket.io")( server, {
@@ -15,9 +15,24 @@ server.listen(PORT, () => {
 });
 
 io.on("connection", (socket) => {
-  const player = new Player();
-  const room = new Room();
+  let room = null;
+  let player = null;
   console.log("User connected", socket.id);
+  socket.on("event://player-join", function(data) {
+    room = rooms.get(data.roomName);
+    if (room) {
+      player = room.players.get(data.nickName);
+      if (player) {
+        socket.emit('event://player-join', {
+          player,
+          room : {
+            ...room,
+            players: Array.from(room.players.values())
+          }
+        });
+      }
+    }
+  });
   socket.on("event://send-message", function(msg) {
     console.log("got", msg);
     const payload = JSON.parse(msg);
@@ -28,28 +43,68 @@ io.on("connection", (socket) => {
   });
   socket.on("event://game-start", () => {
     room.isStarted = true;
-    player.reset();
-    const payload = player;
-    socket.broadcast.emit("event://game-start", JSON.stringify(payload));
+    for (let playerEnt in room.players.values()) {
+      playerEnt.reset();
+      playerEnt.updateStage();
+      if (playerEnt.nickname === player.nickname)
+        player = playerEnt;
+    }
+    console.log("Game start: ");
+    socket.emit("event://game-start", {
+      player,
+      room : {
+        ...room,
+        players: Array.from(room.players.values())
+      }
+    });
   });
   socket.on("event://player-reset", () => {
     player.reset();
-    const payload = player;
-    socket.broadcast.emit('player-reset', JSON.stringify(payload));
+    player.updateStage();
+    room.players.set(player.nickname, player);
+    const payload = {
+      player,
+      room: {
+        ...room,
+        players: Array.from(room.players.values())
+      }
+    };
+    socket.emit('player-reset', payload);
   });
   socket.on("event://player-move", ({ dir }) => {
     player.move(dir);
-    const payload = player;
-    socket.broadcast.emit("event://player-move", JSON.stringify(payload));
+    room.players.set(player.nickname, player);
+    const payload = {
+      player,
+      room: {
+        ...room,
+        players: Array.from(room.players.values())
+      }
+    };
+    socket.emit("event://player-move", payload);
   });
   socket.on("event://player-drop", () => {
     player.drop();
-    const payload = player;
-    socket.broadcast.emit("event://player-drop", JSON.stringify(payload));
+    room.players.set(player.nickname, player);
+    const payload = {
+      player,
+      room: {
+        ...room,
+        players: Array.from(room.players.values())
+      }
+    };
+    socket.emit("event://player-drop", payload);
   });
   socket.on("event://player-rotate", ( { dir }) => {
     player.playerRotate(dir);
-    const payload = player;
-    socket.broadcast.emit("event://player-rotate", JSON.stringify(payload));
+    room.players.set(player.nickname, player);
+    const payload = {
+      player,
+      room: {
+        ...room,
+        players: Array.from(room.players.values())
+      }
+    };
+    socket.emit("event://player-rotate", payload);
   });
 });

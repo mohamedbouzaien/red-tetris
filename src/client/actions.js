@@ -82,7 +82,7 @@ export function joinRoom(roomId, username) {
         }).then((res) =>
             res.json()
         ).then((result) => {
-            dispatch(joinRoomSuccess(result));
+            //dispatch(joinRoomSuccess(result));
         }).catch((error) => {
             dispatch(joinRoomError(error));
         })
@@ -103,37 +103,37 @@ export function updateChatLog(update) {
     }
 }
 
-export function gameStartAction(player) {
+export function gameStartAction(payload) {
     return {
         type: GAME_START,
-        player
+        payload
     }
 }
 
-export function playerResetAction(player) {
+export function playerResetAction(payload) {
     return {
         type: PLAYER_RESET,
-        player
+        payload
     }
 }
 
-export function playerMoveAction(player) {
+export function playerMoveAction(payload) {
     return {
         type: PLAYER_MOVE,
-        player
+        payload
     }
 }
 
-export function playerDropAction(player) {
+export function playerDropAction(payload) {
     return {
         type: PLAYER_DROP,
-        player
+        payload
     }
 }
 
-export function playerRotateAction(player) {
+export function playerRotateAction(payload) {
     return {
         type: PLAYER_ROTATE,
-        player
+        payload
     }
 }

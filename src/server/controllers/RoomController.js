@@ -1,3 +1,4 @@
+const Player = require("../models/Player");
 const Room = require("../models/Room");
 
 const rooms = new Map();
@@ -17,15 +18,17 @@ const RoomController = {
                     error: `${name} is full! Go away!`
                 })
             }
-            room.players.set(nickname, nickname);
+            room.players.set(nickname, new Player(nickname, room.tetrominos));
+            rooms.set(name, room);
+            console.log(rooms);
             return res.status(200).json({
                 ...rooms.get(name),
                 chats: chatLogs.get(name)
             })
         } else {
             const room = new Room(name);
-            room.players.set(nickname, nickname);
-            rooms.set(name, new Room(name));
+            room.players.set(nickname, new Player(nickname, room.tetrominos));
+            rooms.set(name, room);
             chatLogs.set(name, []);
             return res.status(200).json({
                 ...rooms.get(name),
@@ -36,7 +39,6 @@ const RoomController = {
 
     find: async (req, res) => {
         const { name, username } = req.query;
-        console.log(rooms);
         if (rooms.has(name)) {
             return res.status(200).json({
                 ...rooms.get(name),

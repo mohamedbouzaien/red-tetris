@@ -8,15 +8,15 @@ const Chat = ({history, match}) => {
     const [currentMessage, setCurrentMessage] = useState("");
     const { roomName, userName } = match.params;
     //const username = useSelector(state => state.username);
-    //const room = useSelector(state => state.room);
+    const ws = useContext(WebSocketContext);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(joinRoom(roomName, userName));
+        //dispatch(joinRoom(roomName, userName));
+        ws.playerJoin(roomName, userName);
         dispatch(setUsername(userName));
     }, [])
     const chats = useSelector(state => state.chatLog);
     console.log(chats);
-    const ws = useContext(WebSocketContext);
     const sendMessage = async () => {
       await ws.sendMessage(roomName, {
           username: userName,
