@@ -1,6 +1,6 @@
 const {server, app} = require('./App');
 const { chatLogs, rooms } = require('./controllers/RoomController');
-const Player = require('./models/Player');
+const {Player, PLAYER_STATUS} = require('./models/Player');
 const Room = require('./models/Room');
 const io = require("socket.io")( server, {
   cors: {
@@ -42,21 +42,34 @@ io.on("connection", (socket) => {
     socket.broadcast.emit('event://get-message', msg);
   });
   socket.on("event://game-start", () => {
-    room.isStarted = true;
-    for (let playerEnt in room.players.values()) {
-      playerEnt.reset();
-      playerEnt.updateStage();
-      if (playerEnt.nickname === player.nickname)
-        player = playerEnt;
-    }
-    console.log("Game start: ");
-    socket.emit("event://game-start", {
-      player,
-      room : {
-        ...room,
-        players: Array.from(room.players.values())
+    player.status = PLAYER_STATUS.READY;
+    room.players.set(player.nickname, player);
+    let canStart = true;
+    console.log(room.players.values());
+    for (let [pkey, playerEnt] of room.players) {
+      console.log(playerEnt.nickname, " ", playerEnt.status);
+      if (playerEnt.status !== PLAYER_STATUS.READY) {
+        canStart = false;
       }
-    });
+    }
+    if (canStart === true) {
+      console.log(canStart);
+      room.isStarted = true;
+      for (let playerEnt in room.players.values()) {
+        playerEnt.reset();
+        playerEnt.updateStage();
+        if (playerEnt.nickname === player.nickname)
+          player = playerEnt;
+      }
+      console.log("Game start: ");
+      socket.emit("event://game-start", {
+        player,
+        room : {
+          ...room,
+          players: Array.from(room.players.values())
+        }
+      });
+    }
   });
   socket.on("event://player-reset", () => {
     player.reset();
@@ -85,6 +98,9 @@ io.on("connection", (socket) => {
   });
   socket.on("event://player-drop", () => {
     player.drop();
+    if (player.status === PLAYER_STATUS.FINISHED) {
+      room.gameOver = true;
+    }
     room.players.set(player.nickname, player);
     const payload = {
       player,

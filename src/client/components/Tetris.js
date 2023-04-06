@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Stage from "./Stage";
 import Display from "./Display";
 import StartButton from "./StartButton";
@@ -13,19 +13,18 @@ import store from "../store";
 import { randomTetromino } from "../tetrominos";
 
 const Tetris = ({history, match}) => {
-    const [dropTime, setDropTime] = useState(null);
     const player = useSelector(state =>state.player);
     const gameOver = useSelector(state => state.gameOver);
     const room = useSelector(state => state.room);
-
+    const [dropTime, setDropTime] = useState(null);
     console.log(player);
     console.log(room);
     const ws = useContext(WebSocketContext);
     console.log('re-render');
     const startGame = async () => {
-        setDropTime(1000);
         await ws.gameStart();
     }
+    
 
     const move = async ({ keyCode }) => {
         if (!gameOver) {
@@ -41,6 +40,12 @@ const Tetris = ({history, match}) => {
         }
     }
 
+    useEffect(() => {
+        if (room?.isStarted === true) {
+            setDropTime(player?.dropTime);
+        }
+     },[player]) 
+
     useInterval(async () => {
         if (!gameOver)
             await ws.playerDrop();
@@ -55,12 +60,12 @@ const Tetris = ({history, match}) => {
                                 <Display gameOver={gameOver} text="Game Over" />
                             ) : (
                             <div>
-                                <Display text="Score" />
-                                <Display text="Rows" />
-                                <Display text="Level" />
+                                <Display text={`Score: ${player ? player.score : 0}`} />
+                                <Display text={`Rows: ${player ? player.rows : 0}`} />
+                                <Display text={`Level: ${player ? player.level : 0}`} />
                             </div>
                             )}
-                            <StartButton callback={startGame}/>
+                            <StartButton text={room && player && room.ownerName === player.nickname ? "Start" : "Ready" } callback={startGame}/>
                         </aside>
 
                     </StyledTetris>

@@ -6,7 +6,8 @@ const initialState = {
     username: null,
     player: null,
     gameOver: false,
-    isStarted: false
+    isStarted: false,
+    dropTime: 1000
 }
 
 export default function chatReducer(state = initialState, action) {
@@ -76,7 +77,8 @@ export default function chatReducer(state = initialState, action) {
                 ...state,
                 player: action.payload.player,
                 room: action.payload.room,
-                gameOver: action.payload.player.status
+                gameOver: action.payload.room.gameOver,
+                dropTime: action.payload.room.dropTime
             };
         
         case PLAYER_ROTATE:

@@ -1,4 +1,4 @@
-const Player = require("../models/Player");
+const {Player} = require("../models/Player");
 const Room = require("../models/Room");
 
 const rooms = new Map();
@@ -20,7 +20,6 @@ const RoomController = {
             }
             room.players.set(nickname, new Player(nickname, room.tetrominos));
             rooms.set(name, room);
-            console.log(rooms);
             return res.status(200).json({
                 ...rooms.get(name),
                 chats: chatLogs.get(name)
@@ -28,6 +27,7 @@ const RoomController = {
         } else {
             const room = new Room(name);
             room.players.set(nickname, new Player(nickname, room.tetrominos));
+            room.ownerName = nickname;
             rooms.set(name, room);
             chatLogs.set(name, []);
             return res.status(200).json({

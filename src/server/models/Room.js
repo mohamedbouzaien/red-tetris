@@ -4,6 +4,8 @@ class Room {
     constructor(name) {
         this.name = name;
         this.isStarted = false;
+        this.gameOver = false;
+        this.ownerName = '';
         this.players = new Map();
         this.tetrominos = new Array(100);
         for (let i = 0; i < 100; i++) {
