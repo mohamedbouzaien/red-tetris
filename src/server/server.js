@@ -22,9 +22,16 @@ io.on("connection", (socket) => {
     room = rooms.get(data.roomName);
     if (room) {
       player = room.players.get(data.nickName);
+      socket.join(room.name);
       if (player) {
         socket.emit('event://player-join', {
           player,
+          room : {
+            ...room,
+            players: Array.from(room.players.values())
+          }
+        });
+        socket.broadcast.to(room.name).emit('event://player-join', {
           room : {
             ...room,
             players: Array.from(room.players.values())
@@ -39,12 +46,15 @@ io.on("connection", (socket) => {
     if (chatLogs[payload.roomID]) {
       chatLogs[msg.roomID].push(payload.data);
     }
-    socket.broadcast.emit('event://get-message', msg);
+    socket.to(room.name).emit('event://get-message', msg);
   });
   socket.on("event://game-start", () => {
     player.status = PLAYER_STATUS.READY;
     room.players.set(player.nickname, player);
     let canStart = true;
+    if (player.nickname !== room.ownerName) {
+      canStart = false;
+    }
     console.log(room.players.values());
     for (let [pkey, playerEnt] of room.players) {
       console.log(playerEnt.nickname, " ", playerEnt.status);
@@ -55,21 +65,28 @@ io.on("connection", (socket) => {
     if (canStart === true) {
       console.log(canStart);
       room.isStarted = true;
-      for (let playerEnt in room.players.values()) {
+      for (let [pkey, playerEnt] of room.players) {
+        playerEnt.status = PLAYER_STATUS.PLAYING;
         playerEnt.reset();
         playerEnt.updateStage();
         if (playerEnt.nickname === player.nickname)
           player = playerEnt;
       }
       console.log("Game start: ");
-      socket.emit("event://game-start", {
-        player,
-        room : {
-          ...room,
-          players: Array.from(room.players.values())
-        }
-      });
     }
+    socket.emit("event://player-ready", {
+      player,
+      room : {
+        ...room,
+        players: Array.from(room.players.values())
+      }
+    });
+    io.in(room.name).emit("event://game-start-broadcast", {
+      room : {
+        ...room,
+        players: Array.from(room.players.values())
+      }
+    });
   });
   socket.on("event://player-reset", () => {
     player.reset();

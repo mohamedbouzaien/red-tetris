@@ -1,4 +1,4 @@
-import { CREATE_ROOM_SUCCESS, GAME_START, JOIN_ROOM_SUCCESS, PLAYER_MOVE, PLAYER_RESET, SET_USERNAME, UPDATE_CHAT_LOG, PLAYER_DROP, PLAYER_ROTATE } from './actions';
+import { CREATE_ROOM_SUCCESS, GAME_START, JOIN_ROOM_SUCCESS, PLAYER_MOVE, PLAYER_RESET, SET_USERNAME, UPDATE_CHAT_LOG, PLAYER_DROP, PLAYER_ROTATE, PLAYER_READY } from './actions';
 
 const initialState = {
     room: null,
@@ -22,9 +22,15 @@ export default function chatReducer(state = initialState, action) {
         case JOIN_ROOM_SUCCESS:
             console.log("got to JOIN_ROOM_SUCCESS reducer");
             console.log(JSON.stringify(action.payload.players));
+            if (action.payload.player) {
+                return {
+                    ...state,
+                    player: action.payload.player,
+                    room: action.payload.room
+                };
+            }
             return {
                 ...state,
-                player: action.payload.player,
                 room: action.payload.room
             };
 
@@ -51,8 +57,8 @@ export default function chatReducer(state = initialState, action) {
             console.log(action.player);
             return {
                 ...state,
-                player: action.payload.player,
-                room: action.payload.room
+                room: action.payload.room,
+                isStarted: action.payload.room.isStarted
             };
         
         case PLAYER_RESET:
@@ -88,7 +94,14 @@ export default function chatReducer(state = initialState, action) {
                 player: action.payload.player,
                 room: action.payload.room
             };
-        
+
+        case PLAYER_READY:
+            return {
+                ...state,
+                player: action.payload.player,
+                room: action.payload.room
+            };
+
         default:
             return state;
     }

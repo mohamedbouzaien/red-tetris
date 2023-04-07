@@ -17,6 +17,7 @@ const Tetris = ({history, match}) => {
     const gameOver = useSelector(state => state.gameOver);
     const room = useSelector(state => state.room);
     const [dropTime, setDropTime] = useState(null);
+    const [disabledButton, setDisabledButton] = useState(false);
     console.log(player);
     console.log(room);
     const ws = useContext(WebSocketContext);
@@ -43,8 +44,9 @@ const Tetris = ({history, match}) => {
     useEffect(() => {
         if (room?.isStarted === true) {
             setDropTime(player?.dropTime);
+            setDisabledButton(true);
         }
-     },[player]) 
+     }, [player]) 
 
     useInterval(async () => {
         if (!gameOver)
@@ -54,7 +56,11 @@ const Tetris = ({history, match}) => {
     return (
                 <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={ e => move(e)}>
                     <StyledTetris>
-                        <Stage stage={ player ? player.stage : null }/>
+                        <div style={{display:"block",
+                        textAlign:"center"}}>
+                        <h3 style={{color:"white"}}>{player ? player.nickname : ""}</h3>
+                        <Stage stage={ player ? player.stage : null } scale={1} status={player ? player.status : 0}/>
+                        </div>
                         <aside>
                             {gameOver ? (
                                 <Display gameOver={gameOver} text="Game Over" />
@@ -65,15 +71,19 @@ const Tetris = ({history, match}) => {
                                 <Display text={`Level: ${player ? player.level : 0}`} />
                             </div>
                             )}
-                            <StartButton text={room && player && room.ownerName === player.nickname ? "Start" : "Ready" } callback={startGame}/>
+                            <StartButton disable={disabledButton} text={room && player && room.ownerName === player.nickname ? "Start" : "Ready" } callback={startGame}/>
                         </aside>
 
                     </StyledTetris>
                     {
                         room && player &&
                         room.players.map((p) => p.nickname === player.nickname ? 
-                        <div key={p.nickname}></div> : 
-                        <Stage key={p.nickname} stage={p.stage}/>
+                        <div key={p.nickname} ></div> : 
+                        <div key={p.nickname} style={{display:"block",
+                        textAlign:"center"}}>
+                            <h4 style={{color:"white"}}>{p.nickname}</h4>
+                            <Stage key={p.nickname} stage={p.stage} scale={0.5} status = {p.status}/>
+                        </div>
                         )
                     }
                     <Chat history={history} match={match}/>

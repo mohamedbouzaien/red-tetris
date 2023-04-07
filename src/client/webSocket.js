@@ -1,6 +1,6 @@
 import { createContext, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { gameStartAction, joinRoomSuccess, playerDropAction, playerMoveAction, playerResetAction, playerRotateAction, updateChatLog } from "./actions";
+import { gameStartAction, joinRoomSuccess, playerDropAction, playerMoveAction, playerReadyAction, playerResetAction, playerRotateAction, updateChatLog } from "./actions";
 import io from "socket.io-client";
 
 const WebSocketContext = createContext(null);
@@ -57,7 +57,7 @@ export default ({ children }) => {
             console.log(payload);
             dispatch(joinRoomSuccess(payload));
         })
-        socket.on("event://game-start", (payload) => {
+        socket.on("event://game-start-broadcast", (payload) => {
             dispatch(gameStartAction(payload));
         });
         socket.on("event://player-reset", (payload) => {
@@ -71,6 +71,9 @@ export default ({ children }) => {
         });
         socket.on("event://player-rotate", (payload) => {
             dispatch(playerRotateAction(payload));
+        });
+        socket.on("event://player-ready", (payload) => {
+            dispatch(playerReadyAction(payload));
         });
         ws.current = {
             socket: socket,

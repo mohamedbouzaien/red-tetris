@@ -1,6 +1,6 @@
 export const STAGE_WIDTH = 10;
 export const STAGE_HEIGHT = 20;
-const PLAYER_STATUS = {
+export const PLAYER_STATUS = {
     JOINDED: 0,
     READY: 1,
     PLAYING: 2,

@@ -12,6 +12,7 @@ export const PLAYER_RESET = "PLAYER_RESET";
 export const PLAYER_MOVE = "PLAYER_MOVE";
 export const PLAYER_DROP = "PLAYER_DROP";
 export const PLAYER_ROTATE = "PLAYER_ROTATE";
+export const PLAYER_READY = "PLAYER_READY";
 
 export function createRoomRequest() {
     return {
@@ -134,6 +135,13 @@ export function playerDropAction(payload) {
 export function playerRotateAction(payload) {
     return {
         type: PLAYER_ROTATE,
+        payload
+    }
+}
+
+export function playerReadyAction(payload) {
+    return {
+        type: PLAYER_READY,
         payload
     }
 }
