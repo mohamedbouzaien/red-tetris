@@ -11,6 +11,7 @@ import { createStage } from "../gamehelpers";
 import { useInterval } from "../hooks/useInterval";
 import store from "../store";
 import { randomTetromino } from "../tetrominos";
+import io from "socket.io-client";
 
 const Tetris = ({history, match}) => {
     const player = useSelector(state =>state.player);
@@ -40,6 +41,13 @@ const Tetris = ({history, match}) => {
             }
         }
     }
+
+    useEffect(() => {
+        const socket = io.connect("http://localhost:3004");
+        return() => {
+            socket.disconnect();
+        }
+    }, []);
 
     useEffect(() => {
         if (room?.isStarted === true) {

@@ -13,6 +13,8 @@ export const PLAYER_MOVE = "PLAYER_MOVE";
 export const PLAYER_DROP = "PLAYER_DROP";
 export const PLAYER_ROTATE = "PLAYER_ROTATE";
 export const PLAYER_READY = "PLAYER_READY";
+export const RESET_STATE = "RESET_STATE";
+export const PLAYER_OUT = "PLAYER_OUT";
 
 export function createRoomRequest() {
     return {
@@ -142,6 +144,19 @@ export function playerRotateAction(payload) {
 export function playerReadyAction(payload) {
     return {
         type: PLAYER_READY,
+        payload
+    }
+}
+
+export function resetStateAction() {
+    return {
+        type: RESET_STATE
+    }
+}
+
+export function playerOutAction(payload) {
+    return {
+        type: PLAYER_OUT,
         payload
     }
 }

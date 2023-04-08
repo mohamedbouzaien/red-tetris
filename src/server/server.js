@@ -19,6 +19,7 @@ io.on("connection", (socket) => {
   let player = null;
   console.log("User connected", socket.id);
   socket.on("event://player-join", function(data) {
+    console.log("Got here!");
     room = rooms.get(data.roomName);
     if (room) {
       player = room.players.get(data.nickName);
@@ -37,6 +38,14 @@ io.on("connection", (socket) => {
             players: Array.from(room.players.values())
           }
         });
+        const msg = JSON.stringify({
+          roomId: room.name,
+          data: {
+            username: "tetrisBot",
+            message: player.nickname + " has joined the room"
+          }
+        });
+        io.in(room.name).emit('event://get-message', msg);
       }
     }
   });
@@ -117,6 +126,7 @@ io.on("connection", (socket) => {
     player.drop();
     if (player.status === PLAYER_STATUS.FINISHED) {
       room.gameOver = true;
+      room.calculateWinner();
     }
     room.players.set(player.nickname, player);
     const payload = {
@@ -140,4 +150,36 @@ io.on("connection", (socket) => {
     };
     socket.emit("event://player-rotate", payload);
   });
+  socket.on("disconnect", () => {
+    console.log("user disconneted");
+    rooms.set(room.name, room.players.delete(player.nickname));
+    socket.leave(room.name);
+    const msg = JSON.stringify({
+      roomId: room.name,
+      data: {
+        username: "tetrisBot",
+        message: player.nickname + " has left the room"
+      }
+    });
+    io.in(room.name).emit('event://get-message', msg);
+    if (room.players.size() === 0) {
+      rooms.delete(room.id);
+      //room = null;
+      player = null;
+      return;
+    }
+    if (!room.isStarted) {
+
+    } else {
+      room.gameOver = true;
+      room.calculateWinner();
+    }
+    io.in(room.name).emit("event://player-out", {
+      room : {
+        ...room,
+        players: Array.from(room.players.values())
+      }
+    });
+    console.log('user disconnected', socket.id);
+  })
 });

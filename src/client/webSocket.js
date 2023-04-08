@@ -1,6 +1,6 @@
 import { createContext, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { gameStartAction, joinRoomSuccess, playerDropAction, playerMoveAction, playerReadyAction, playerResetAction, playerRotateAction, updateChatLog } from "./actions";
+import { gameStartAction, joinRoomSuccess, playerDropAction, playerMoveAction, playerOutAction, playerReadyAction, playerResetAction, playerRotateAction, resetStateAction, updateChatLog } from "./actions";
 import io from "socket.io-client";
 
 const WebSocketContext = createContext(null);
@@ -74,6 +74,14 @@ export default ({ children }) => {
         });
         socket.on("event://player-ready", (payload) => {
             dispatch(playerReadyAction(payload));
+        });
+        socket.on("disconnect", () => {
+            console.log("Disconnected from socket");
+            dispatch(resetStateAction());
+        })
+        socket.on("event://player-out", (payload) => {
+            console.log("player out event");
+            dispatch(playerOutAction(payload));
         });
         ws.current = {
             socket: socket,
