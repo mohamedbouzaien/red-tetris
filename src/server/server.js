@@ -15,11 +15,10 @@ server.listen(PORT, () => {
 });
 
 io.on("connection", (socket) => {
-  let room = null;
+  let room;
   let player = null;
   console.log("User connected", socket.id);
   socket.on("event://player-join", function(data) {
-    console.log("Got here!");
     room = rooms.get(data.roomName);
     if (room) {
       player = room.players.get(data.nickName);
@@ -58,13 +57,14 @@ io.on("connection", (socket) => {
     socket.to(room.name).emit('event://get-message', msg);
   });
   socket.on("event://game-start", () => {
+    if (!room)
+      return;
     player.status = PLAYER_STATUS.READY;
     room.players.set(player.nickname, player);
     let canStart = true;
     if (player.nickname !== room.ownerName) {
       canStart = false;
     }
-    console.log(room.players.values());
     for (let [pkey, playerEnt] of room.players) {
       console.log(playerEnt.nickname, " ", playerEnt.status);
       if (playerEnt.status !== PLAYER_STATUS.READY) {
@@ -90,7 +90,7 @@ io.on("connection", (socket) => {
         players: Array.from(room.players.values())
       }
     });
-    io.in(room.name).emit("event://game-start-broadcast", {
+    io.to(room.name).emit("event://game-start-broadcast", {
       room : {
         ...room,
         players: Array.from(room.players.values())
@@ -98,6 +98,8 @@ io.on("connection", (socket) => {
     });
   });
   socket.on("event://player-reset", () => {
+    if (!room)
+      return;
     player.reset();
     player.updateStage();
     room.players.set(player.nickname, player);
@@ -111,6 +113,8 @@ io.on("connection", (socket) => {
     socket.emit('player-reset', payload);
   });
   socket.on("event://player-move", ({ dir }) => {
+    if (!room)
+      return;
     player.move(dir);
     room.players.set(player.nickname, player);
     const payload = {
@@ -123,9 +127,12 @@ io.on("connection", (socket) => {
     socket.emit("event://player-move", payload);
   });
   socket.on("event://player-drop", () => {
+    if (!room)
+      return;
     player.drop();
     if (player.status === PLAYER_STATUS.FINISHED) {
       room.gameOver = true;
+      console.log("before calculate winner");
       room.calculateWinner();
     }
     room.players.set(player.nickname, player);
@@ -139,6 +146,8 @@ io.on("connection", (socket) => {
     socket.emit("event://player-drop", payload);
   });
   socket.on("event://player-rotate", ( { dir }) => {
+    if (!room)
+      return;
     player.playerRotate(dir);
     room.players.set(player.nickname, player);
     const payload = {
@@ -150,7 +159,12 @@ io.on("connection", (socket) => {
     };
     socket.emit("event://player-rotate", payload);
   });
+  /*socket.onAny((eventName, ...args) => {
+    console.log(eventName, " ", room);
+  });*/
   socket.on("disconnect", () => {
+    if (!room)
+      return;
     console.log("user disconneted");
     rooms.set(room.name, room.players.delete(player.nickname));
     socket.leave(room.name);
@@ -162,17 +176,15 @@ io.on("connection", (socket) => {
       }
     });
     io.in(room.name).emit('event://get-message', msg);
-    if (room.players.size() === 0) {
-      rooms.delete(room.id);
-      //room = null;
+    if (room.players.size === 0) {
+      rooms.delete(room.name);
+      room = null;
       player = null;
       return;
     }
-    if (!room.isStarted) {
-
-    } else {
+    if (room.isStarted) {
       room.gameOver = true;
-      room.calculateWinner();
+      //room.calculateWinner();
     }
     io.in(room.name).emit("event://player-out", {
       room : {

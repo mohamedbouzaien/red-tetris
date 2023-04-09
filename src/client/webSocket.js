@@ -7,98 +7,121 @@ const WebSocketContext = createContext(null);
 
 export { WebSocketContext };
 
-export default ({ children }) => {
-    let socket;
-    const ws = useRef(null);
-    const dispatch = useDispatch();
+let socketInstance = null;
 
-    const sendMessage = (roomId, message) => {
-        const payload = {
-            roomId: roomId,
-            data: message
-        }
-        socket.emit("event://send-message", JSON.stringify(payload));
-        dispatch(updateChatLog(payload));
-    }
+const getSocketInstance = () => {
+  if (!socketInstance) {
+    socketInstance = io.connect("http://localhost:3004");
+  }
+  return socketInstance;
+};
 
-    const playerJoin = (roomName, nickName) => {
-        socket.emit("event://player-join", {
-            roomName,
-            nickName
-        });
-    }
-    const gameStart = () => {
-        socket.emit("event://game-start");
-    }
-    
-    const playerReset = () => {
-        socket.emit("event://player-reset");
-    }
-    
-    const playerMove = (dir) => {
-        socket.emit("event://player-move", { dir });
-    }
-    
-    const playerDrop = () => {
-        socket.emit("event://player-drop");
-    }
-    
-    const playerRotate = (dir) => {
-        socket.emit("event://player-rotate", { dir });
-    }
-    if (!socket) {
-        socket = io.connect("http://localhost:3004");
-        socket.on("event://get-message", (msg) => {
-            const payload = JSON.parse(msg);
-            console.log(payload);
-            dispatch(updateChatLog(payload));
-        });
-        socket.on("event://player-join", (payload) => {
-            console.log(payload);
-            dispatch(joinRoomSuccess(payload));
-        })
-        socket.on("event://game-start-broadcast", (payload) => {
-            dispatch(gameStartAction(payload));
-        });
-        socket.on("event://player-reset", (payload) => {
-            dispatch(playerResetAction(payload));
-        });
-        socket.on("event://player-move", (payload) => {
-            dispatch(playerMoveAction(payload));
-        });
-        socket.on("event://player-drop", (payload) => {
-            dispatch(playerDropAction(payload));
-        });
-        socket.on("event://player-rotate", (payload) => {
-            dispatch(playerRotateAction(payload));
-        });
-        socket.on("event://player-ready", (payload) => {
-            dispatch(playerReadyAction(payload));
-        });
-        socket.on("disconnect", () => {
-            console.log("Disconnected from socket");
-            dispatch(resetStateAction());
-        })
-        socket.on("event://player-out", (payload) => {
-            console.log("player out event");
-            dispatch(playerOutAction(payload));
-        });
-        ws.current = {
-            socket: socket,
-            sendMessage,
-            gameStart,
-            playerReset,
-            playerMove,
-            playerDrop,
-            playerRotate,
-            playerJoin
-        }
-    }
-    console.log(ws);
-
-    return (
-        <WebSocketContext.Provider value={ws.current}>
-            {children}
-        </WebSocketContext.Provider>
-    )
+const resetSocketInstance = () => {
+  socketInstance = null;
 }
+
+export default ({ children }) => {
+  const socket = useRef(null);
+  const dispatch = useDispatch();
+    console.log("rerenders the webSocketContext component");
+  const sendMessage = (roomId, message) => {
+    const payload = {
+      roomId: roomId,
+      data: message
+    };
+    getSocketInstance().emit("event://send-message", JSON.stringify(payload));
+    dispatch(updateChatLog(payload));
+  };
+
+  const playerJoin = (roomName, nickName) => {
+    if (getSocketInstance()) {
+      getSocketInstance().emit("event://player-join", {
+        roomName,
+        nickName
+      });
+    }
+  };
+  const gameStart = () => {
+    getSocketInstance().emit("event://game-start");
+  };
+
+  const playerReset = () => {
+    getSocketInstance().emit("event://player-reset");
+  };
+
+  const playerMove = (dir) => {
+    getSocketInstance().emit("event://player-move", { dir });
+  };
+
+  const playerDrop = () => {
+    getSocketInstance().emit("event://player-drop");
+  };
+
+  const playerRotate = (dir) => {
+    getSocketInstance().emit("event://player-rotate", { dir });
+  };
+
+  const disconnect = () => {
+    getSocketInstance().disconnect();
+    resetSocketInstance();
+  }
+
+    const socketInstance = getSocketInstance();
+    socket.current = socketInstance;
+    socketInstance.on("event://get-message", (msg) => {
+      const payload = JSON.parse(msg);
+      console.log(payload);
+      dispatch(updateChatLog(payload));
+    });
+    socketInstance.on("event://player-join", (payload) => {
+      console.log(payload);
+      dispatch(joinRoomSuccess(payload));
+    });
+    socketInstance.on("event://game-start-broadcast", (payload) => {
+      dispatch(gameStartAction(payload));
+    });
+    socketInstance.on("event://player-reset", (payload) => {
+      dispatch(playerResetAction(payload));
+    });
+    socketInstance.on("event://player-move", (payload) => {
+      dispatch(playerMoveAction(payload));
+    });
+    socketInstance.on("event://player-drop", (payload) => {
+      dispatch(playerDropAction(payload));
+    });
+    socketInstance.on("event://player-rotate", (payload) => {
+      dispatch(playerRotateAction(payload));
+    });
+    socketInstance.on("event://player-ready", (payload) => {
+      dispatch(playerReadyAction(payload));
+    });
+    socketInstance.on("disconnect", () => {
+      console.log("Disconnected from socket");
+      dispatch(resetStateAction());
+    });
+    socketInstance.on("event://player-out", (payload) => {
+      console.log("player out event");
+      dispatch(playerOutAction(payload));
+    });
+  
+  
+
+  const ws = {
+    socket: socket.current,
+    sendMessage,
+    gameStart,
+    playerReset,
+    playerMove,
+    playerDrop,
+    playerRotate,
+    playerJoin,
+    disconnect
+  };
+  console.log(ws);
+
+  return (
+    <WebSocketContext.Provider value={ws}>
+      {children}
+    </WebSocketContext.Provider>
+  );
+};

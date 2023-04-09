@@ -42,12 +42,12 @@ const Tetris = ({history, match}) => {
         }
     }
 
-    useEffect(() => {
-        const socket = io.connect("http://localhost:3004");
+    /*useEffect(() => {
         return() => {
-            socket.disconnect();
+            console.log("socket disconnect");
+            //ws.disconnect();
         }
-    }, []);
+    }, []);*/
 
     useEffect(() => {
         if (room?.isStarted === true) {

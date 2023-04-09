@@ -27,7 +27,8 @@ class Room {
             value: 0
         };
         for (let [pkey, playerEnt] of this.players) {
-            if (playerEnt.score > max.value) {
+            console.log("calculate winner: ", playerEnt);
+            if (playerEnt.score >= max.value) {
                 max.name = playerEnt.nickname;
                 max.value = playerEnt.score;
             }
