@@ -132,6 +132,15 @@ io.on("connection", (socket) => {
       return;
     player.drop();
     room.players.set(player.nickname, player);
+    for (let [pkey, playerEnt] of room.players) {
+      if (playerEnt.rowsCleared > 0) {
+        for (let [pkey, playerEnt2] of room.players) {
+          if (playerEnt.nickname !== playerEnt2.nickname) 
+            playerEnt2.getMalus(playerEnt.rowsCleared);
+        }
+        playerEnt.rowsCleared = 0;
+      }
+    }
     if (player.status === PLAYER_STATUS.FINISHED) {
       room.gameOver = true;
       room.calculateWinner();

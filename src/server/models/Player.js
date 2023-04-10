@@ -49,6 +49,7 @@ class Player {
         this.level = 0;
         this.dropTime = 1000;
         this.speedMode = false;
+        this.rowsCleared = 0;
     }
 
     reset() {
@@ -138,10 +139,9 @@ class Player {
     }
 
     sweepRows() {
-        let rowsCleared = 0;
         const newStage = this.stage.reduce((ack, row) => {
-            if (row.findIndex(cell => cell[0] === 0) === -1) {
-                rowsCleared++;
+            if (row.findIndex(cell => cell[0] === 0 || cell[1] === 'sticked') === -1) {
+                this.rowsCleared++;
                 ack.unshift(new Array(this.stage[0].length).fill([0, 'clear']));
                 return ack;
             }
@@ -149,7 +149,7 @@ class Player {
             return ack;
         }, []);
         this.stage = newStage;
-        this.calculateScore(rowsCleared);
+        this.calculateScore(this.rowsCleared);
     }
 
     updateStage() {
@@ -194,6 +194,14 @@ class Player {
 
     changeHeartStage() {
         this.stage = HEART_STAGE;
+    }
+
+    getMalus(rowsCleared) {
+        while (rowsCleared > 0) {
+            this.stage.shift();
+            this.stage.push(new Array(this.stage[0].length).fill(["I", 'sticked']));
+            rowsCleared--;
+        }
     }
 }
 module.exports = {Player, PLAYER_STATUS};
