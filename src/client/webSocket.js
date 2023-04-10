@@ -1,6 +1,6 @@
 import { createContext, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { gameStartAction, joinRoomSuccess, playerDropAction, playerMoveAction, playerOutAction, playerReadyAction, playerResetAction, playerRotateAction, resetStateAction, updateChatLog } from "./actions";
+import { changeModeAction, gameStartAction, joinRoomSuccess, playerDropAction, playerMoveAction, playerOutAction, playerReadyAction, playerResetAction, playerRotateAction, resetStateAction, updateChatLog } from "./actions";
 import io from "socket.io-client";
 
 const WebSocketContext = createContext(null);
@@ -61,6 +61,10 @@ export default ({ children }) => {
     getSocketInstance().emit("event://player-rotate", { dir });
   };
 
+  const changeMode = (mode) => {
+    getSocketInstance().emit("event://mode-change", mode);
+  }
+
   const disconnect = () => {
     getSocketInstance().disconnect();
     resetSocketInstance();
@@ -101,6 +105,10 @@ export default ({ children }) => {
       console.log("player out event");
       dispatch(playerOutAction(payload));
     });
+    socketInstance.on("event://mode-change", (mode) => {
+      console.log("mode change", mode);
+      dispatch(changeModeAction(mode));
+    })
   
   
 
@@ -113,6 +121,7 @@ export default ({ children }) => {
     playerDrop,
     playerRotate,
     playerJoin,
+    changeMode,
     disconnect
   };
 

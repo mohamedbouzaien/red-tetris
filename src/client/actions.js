@@ -15,6 +15,7 @@ export const PLAYER_ROTATE = "PLAYER_ROTATE";
 export const PLAYER_READY = "PLAYER_READY";
 export const RESET_STATE = "RESET_STATE";
 export const PLAYER_OUT = "PLAYER_OUT";
+export const CHANGE_MODE = "CHANGE_MODE";
 
 export function createRoomRequest() {
     return {
@@ -158,5 +159,12 @@ export function playerOutAction(payload) {
     return {
         type: PLAYER_OUT,
         payload
+    }
+}
+
+export function changeModeAction(mode) {
+    return {
+        type: CHANGE_MODE,
+        mode
     }
 }

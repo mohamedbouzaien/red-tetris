@@ -1,6 +1,12 @@
 const { PLAYER_STATUS } = require("./Player");
 const Tetromino = require("./Tetromino");
 
+const GAME_MODE = {
+    STANDARD: 0,
+    HEART: 1,
+    SPRINT: 2
+};
+
 class Room {
     constructor(name) {
         this.name = name;
@@ -13,6 +19,7 @@ class Room {
             this.tetrominos[i] = new Tetromino();
             this.tetrominos[i].random();
         }
+        this.mode = GAME_MODE.STANDARD;
     }
     
     findPlayerByNickname(nickname) {
@@ -39,4 +46,4 @@ class Room {
     }
 }
 
-module.exports =  Room;
+module.exports =  {Room, GAME_MODE};

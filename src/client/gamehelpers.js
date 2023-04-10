@@ -7,7 +7,13 @@ export const PLAYER_STATUS = {
     FINISHED: 3,
     WIN: 4,
     LOOSE: 5
-}
+};
+
+export const GAME_MODE = {
+    STANDARD: 0,
+    HEART: 1,
+    SPRINT: 2
+};
 
 export const createStage = () => 
     Array.from(Array(STAGE_HEIGHT), () => 

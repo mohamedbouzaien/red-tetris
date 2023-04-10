@@ -10,6 +10,7 @@ export  const StyledChatHistoryDiv = styled.div`
     margin-bottom: 10px;
     margin-left: 10px;
     background: rgba(0, 0, 0, .6);
+    overflow-y: scroll;
     i {
         color: pink;
         font-weight: bold;

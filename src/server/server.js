@@ -1,3 +1,4 @@
+const { GAME_MODE } = require('./models/Room');
 const {server, app} = require('./App');
 const { chatLogs, rooms } = require('./controllers/RoomController');
 const {Player, PLAYER_STATUS} = require('./models/Player');
@@ -158,9 +159,28 @@ io.on("connection", (socket) => {
     };
     socket.emit("event://player-rotate", payload);
   });
-  /*socket.onAny((eventName, ...args) => {
-    console.log(eventName, " ", room);
-  });*/
+  socket.on("event://mode-change", (mode) => {
+    if (!room)
+      return;
+    room.mode = mode;
+    if (mode === GAME_MODE.SPRINT) {
+      for (let [pkey, playerEnt] of room.players) {
+        playerEnt.speedMode = true;
+        playerEnt.createStage();
+      }
+    } else if (mode === GAME_MODE.HEART) {
+      for (let [pkey, playerEnt] of room.players) {
+        playerEnt.speedMode = false;
+        playerEnt.changeHeartStage();
+      }
+    } else {
+      for (let [pkey, playerEnt] of room.players) {
+        playerEnt.speedMode = false;
+        playerEnt.createStage();
+      }
+    }
+    io.in(room.name).emit("event://mode-change", mode);
+  });
   socket.on("disconnect", () => {
     if (!room)
       return;
@@ -183,7 +203,7 @@ io.on("connection", (socket) => {
     }
     if (room.isStarted) {
       room.gameOver = true;
-      //room.calculateWinner();
+      room.calculateWinner();
     }
     io.in(room.name).emit("event://player-out", {
       room : {

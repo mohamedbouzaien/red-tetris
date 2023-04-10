@@ -12,6 +12,30 @@ const PLAYER_STATUS = {
 }
 const POINTS = [40, 100, 300, 1200];
 
+const HEART_STAGE = [
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], ["Z", "merged"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], ["Z", "merged"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], [0, "clear"], [0, "clear"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], [0, "clear"]],
+    [[0, "clear"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], ["Z", "merged"], [0, "clear"], [0, "clear"], [0, "clear"]],
+    [[0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"], ["Z", "merged"], ["Z", "merged"], [0, "clear"], [0, "clear"], [0, "clear"], [0, "clear"]],
+];
+
 class Player {
     constructor (nickname, tetrominos) {
         this.tetroId = -1;
@@ -166,6 +190,10 @@ class Player {
                 }
             }
         }
+    }
+
+    changeHeartStage() {
+        this.stage = HEART_STAGE;
     }
 }
 module.exports = {Player, PLAYER_STATUS};

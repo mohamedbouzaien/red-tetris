@@ -1,5 +1,5 @@
 const {Player} = require("../models/Player");
-const Room = require("../models/Room");
+const {Room} = require("../models/Room");
 
 const rooms = new Map();
 const chatLogs = new Map();

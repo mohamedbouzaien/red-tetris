@@ -1,4 +1,7 @@
-import { CREATE_ROOM_SUCCESS, GAME_START, JOIN_ROOM_SUCCESS, PLAYER_MOVE, PLAYER_RESET, SET_USERNAME, UPDATE_CHAT_LOG, PLAYER_DROP, PLAYER_ROTATE, PLAYER_READY, RESET_STATE, PLAYER_OUT } from './actions';
+import { CREATE_ROOM_SUCCESS, GAME_START, JOIN_ROOM_SUCCESS, PLAYER_MOVE, 
+    PLAYER_RESET, SET_USERNAME, UPDATE_CHAT_LOG, PLAYER_DROP, PLAYER_ROTATE, 
+    PLAYER_READY, RESET_STATE, PLAYER_OUT, CHANGE_MODE } from './actions';
+import { GAME_MODE } from './gamehelpers';
 
 const initialState = {
     room: null,
@@ -6,7 +9,8 @@ const initialState = {
     username: null,
     player: null,
     gameOver: false,
-    isStarted: false
+    isStarted: false,
+    mode: GAME_MODE.STANDARD
 }
 
 export default function chatReducer(state = initialState, action) {
@@ -108,6 +112,13 @@ export default function chatReducer(state = initialState, action) {
                 ...state,
                 room: action.payload.room
             }
+
+        case CHANGE_MODE:
+            return {
+                ...state,
+                mode: action.mode
+            }
+
         default:
             return state;
     }
