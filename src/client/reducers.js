@@ -29,7 +29,8 @@ export default function chatReducer(state = initialState, action) {
                 return {
                     ...state,
                     player: action.payload.player,
-                    room: action.payload.room
+                    room: action.payload.room,
+                    mode: action.payload.room.mode
                 };
             }
             return {
