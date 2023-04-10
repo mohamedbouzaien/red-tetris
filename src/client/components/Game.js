@@ -4,7 +4,6 @@ import WebSocketProvider from '../webSocket';
 import store from "../store";
 import { Provider } from "react-redux";
 const Game = ({history, match }) => {
-    console.log("rerender");
 return (
     <Provider store={store}>
         <WebSocketProvider>

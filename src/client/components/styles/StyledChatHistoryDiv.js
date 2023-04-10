@@ -1,12 +1,14 @@
 import styled from "styled-components";
 
 export  const StyledChatHistoryDiv = styled.div`
-    width: 400px;
+    width: 80%;
     border: 1px solid #ccc;
-    height:200px; 
+    height:40%; 
     text-align: left;
     padding: 10px;
-    overflow: scroll;
+    min-height: 200px;
+    margin-bottom: 10px;
+    margin-left: 10px;
     background: rgba(0, 0, 0, .6);
     i {
         color: pink;

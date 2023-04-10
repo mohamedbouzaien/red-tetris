@@ -70,11 +70,9 @@ export default ({ children }) => {
     socket.current = socketInstance;
     socketInstance.on("event://get-message", (msg) => {
       const payload = JSON.parse(msg);
-      console.log(payload);
       dispatch(updateChatLog(payload));
     });
     socketInstance.on("event://player-join", (payload) => {
-      console.log(payload);
       dispatch(joinRoomSuccess(payload));
     });
     socketInstance.on("event://game-start-broadcast", (payload) => {
@@ -117,7 +115,6 @@ export default ({ children }) => {
     playerJoin,
     disconnect
   };
-  console.log(ws);
 
   return (
     <WebSocketContext.Provider value={ws}>

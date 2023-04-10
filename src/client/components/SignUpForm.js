@@ -37,7 +37,6 @@ const SignUpForm = ({ history }) => {
                     nickname: nickname,
                     message: result.error
                 });
-                console.log(inputs.message);
             } else {
                 history.push(`/${room}[${nickname}]`);
             }

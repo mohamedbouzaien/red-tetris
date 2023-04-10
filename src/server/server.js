@@ -130,12 +130,11 @@ io.on("connection", (socket) => {
     if (!room)
       return;
     player.drop();
+    room.players.set(player.nickname, player);
     if (player.status === PLAYER_STATUS.FINISHED) {
       room.gameOver = true;
-      console.log("before calculate winner");
       room.calculateWinner();
     }
-    room.players.set(player.nickname, player);
     const payload = {
       player,
       room: {
@@ -165,8 +164,8 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     if (!room)
       return;
-    console.log("user disconneted");
-    rooms.set(room.name, room.players.delete(player.nickname));
+    room.players.delete(player.nickname);
+    rooms.set(room.name, room);
     socket.leave(room.name);
     const msg = JSON.stringify({
       roomId: room.name,

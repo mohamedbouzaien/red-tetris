@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Stage from "./Stage";
 import Display from "./Display";
 import StartButton from "./StartButton";
@@ -12,6 +12,8 @@ import { useInterval } from "../hooks/useInterval";
 import store from "../store";
 import { randomTetromino } from "../tetrominos";
 import io from "socket.io-client";
+import { StyledOtherTetrises } from "./styles/StyledOtherTetrises";
+import { StyledModeDiv } from "./styles/StyledModeDiv";
 
 const Tetris = ({history, match}) => {
     const player = useSelector(state =>state.player);
@@ -19,15 +21,19 @@ const Tetris = ({history, match}) => {
     const room = useSelector(state => state.room);
     const [dropTime, setDropTime] = useState(null);
     const [disabledButton, setDisabledButton] = useState(false);
-    console.log(player);
-    console.log(room);
     const ws = useContext(WebSocketContext);
-    console.log('re-render');
+    const wrapperRef = useRef(null);
+    
     const startGame = async () => {
         await ws.gameStart();
+        setDisabledButton(true);
+        wrapperRef.current.focus();
     }
     
-
+    const quit = async () => {
+        history.push(`/`);
+    }
+    
     const move = async ({ keyCode }) => {
         if (!gameOver) {
             if (keyCode === 37) {
@@ -42,19 +48,19 @@ const Tetris = ({history, match}) => {
         }
     }
 
-    /*useEffect(() => {
+    useEffect(() => {
         return() => {
             console.log("socket disconnect");
-            //ws.disconnect();
+            ws.disconnect();
         }
-    }, []);*/
+    }, []);
 
     useEffect(() => {
         if (room?.isStarted === true) {
+            console.log("Git to set Time");
             setDropTime(player?.dropTime);
-            setDisabledButton(true);
         }
-     }, [player]) 
+     }, [player, room]) 
 
     useInterval(async () => {
         if (!gameOver)
@@ -62,7 +68,10 @@ const Tetris = ({history, match}) => {
     }, dropTime);
 
     return (
-                <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={ e => move(e)}>
+                <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={ e => move(e)} ref={wrapperRef}>
+                    <div style={{display:"flex",
+                        flexDirection:"row"}}>
+                    <StyledModeDiv>Mode</StyledModeDiv>
                     <StyledTetris>
                         <div style={{display:"block",
                         textAlign:"center"}}>
@@ -79,10 +88,12 @@ const Tetris = ({history, match}) => {
                                 <Display text={`Level: ${player ? player.level : 0}`} />
                             </div>
                             )}
-                            <StartButton disable={disabledButton} text={room && player && room.ownerName === player.nickname ? "Start" : "Ready" } callback={startGame}/>
+                            <StartButton disabled={disabledButton} text={room && player && room.ownerName === player.nickname ? "Start" : "Ready" } callback={startGame}/>
+                            <StartButton disabled={false} text={ "QUIT" } callback={quit}/>
                         </aside>
 
                     </StyledTetris>
+                    <StyledOtherTetrises>
                     {
                         room && player &&
                         room.players.map((p) => p.nickname === player.nickname ? 
@@ -94,6 +105,8 @@ const Tetris = ({history, match}) => {
                         </div>
                         )
                     }
+                    </StyledOtherTetrises>
+                    </div>
                     <Chat history={history} match={match}/>
                 </StyledTetrisWrapper>
     )

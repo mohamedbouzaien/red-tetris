@@ -16,24 +16,29 @@ const Chat = ({history, match}) => {
         dispatch(setUsername(userName));
     }, [])
     const chats = useSelector(state => state.chatLog);
-    console.log(chats);
     const sendMessage = async () => {
       await ws.sendMessage(roomName, {
           username: userName,
           message: currentMessage
       });
     }
+
+    const dispatchKey = async ({ keyCode }) => {
+        if (keyCode === 13) {
+            sendMessage();
+        }
+    };
     return (
         <>{userName &&
-            <div className="room">
+            <div>
                 <StyledChatHistoryDiv>
                     {chats.map((c, i) => (
                             <div key={i}><i>{c.username}:</i> {c.message}</div>
                     ))}
                 </StyledChatHistoryDiv>
-                <div className="control">
-                    <input type="text" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)}/>
-                    <button onClick={sendMessage}>&#9658;</button>
+                <div role="button" tabIndex="0" onKeyDown={ e => dispatchKey(e)}>
+                    <input style={{width: "78%", marginLeft: "10px"}} type="text" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)}/>
+                    <button onClick={sendMessage} style={{backgroundColor: "grey"}}>&#9658;</button>
                 </div>
             </div>
             }
