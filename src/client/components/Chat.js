@@ -21,6 +21,7 @@ const Chat = ({history, match}) => {
           username: userName,
           message: currentMessage
       });
+      setCurrentMessage("");
     }
 
     const dispatchKey = async ({ keyCode }) => {

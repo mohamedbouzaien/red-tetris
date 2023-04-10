@@ -19,30 +19,38 @@ const SignUpForm = ({ history }) => {
     const { room, nickname, message } = inputs;
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await fetch("http://localhost:3004/api/room", {
-            method: "POST",
-            body: JSON.stringify({
-                name: room,
-                nickname
-            }),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then((res) =>
-            res.json()
-        ).then((result) => {
-            if (result.error) {
-                setInputs({
-                    room : room,
-                    nickname: nickname,
-                    message: result.error
-                });
-            } else {
-                history.push(`/${room}[${nickname}]`);
-            }
-        }).catch((error) => {
-            console.error("Error:", error);
-        })
+        if (inputs.room === "" || inputs.nickname === "") {
+            setInputs({
+                room : "",
+                nickname: "",
+                message: "Please change blank input"
+            });
+        } else {
+            await fetch("http://localhost:3004/api/room", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: room,
+                    nickname
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then((res) =>
+                res.json()
+            ).then((result) => {
+                if (result.error) {
+                    setInputs({
+                        room : room,
+                        nickname: nickname,
+                        message: result.error
+                    });
+                } else {
+                    history.push(`/${room}[${nickname}]`);
+                }
+            }).catch((error) => {
+                console.error("Error:", error);
+            });
+        }
     }
 
     const handleChange = (e) => {

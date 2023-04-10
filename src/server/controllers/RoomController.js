@@ -13,6 +13,11 @@ const RoomController = {
                     error: `${nickname} is taken. Please change your nickname!`
                 });
             }
+            if (room.isStarted) {
+                return res.status(403).json({
+                    error: `${name} is started! Bye Felicia`
+                });
+            }
             if (room.players.size >= 3) {
                 return res.status(403).json({
                     error: `${name} is full! Go away!`

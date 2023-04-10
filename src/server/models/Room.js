@@ -33,16 +33,18 @@ class Room {
             name: "",
             value: 0
         };
-        for (let [pkey, playerEnt] of this.players) {
-            if (playerEnt.score >= max.value) {
-                max.name = playerEnt.nickname;
-                max.value = playerEnt.score;
+        if (this.players.size > 1) {
+            for (let [pkey, playerEnt] of this.players) {
+                if (playerEnt.score >= max.value) {
+                    max.name = playerEnt.nickname;
+                    max.value = playerEnt.score;
+                }
+                playerEnt.status = PLAYER_STATUS.LOOSE;
             }
-            playerEnt.status = PLAYER_STATUS.LOOSE;
+            const winner = this.players.get(max.name);
+            winner.status = PLAYER_STATUS.WIN;
+            this.players.set(winner.nickname, winner);
         }
-        const winner = this.players.get(max.name);
-        winner.status = PLAYER_STATUS.WIN;
-        this.players.set(winner.nickname, winner);
     }
 }
 
