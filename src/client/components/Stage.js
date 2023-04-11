@@ -27,7 +27,7 @@ const Stage = ({ stage, scale, status }) => {
         {
             stage.map(row => row.map((cell, x) => <Cell key={x} type={cell[0]}/>))
         }
-            <StyledStatus>{message}</StyledStatus>
+            <StyledStatus scale={scale}>{message}</StyledStatus>
         </StyledStage>
     )};
 export default Stage;

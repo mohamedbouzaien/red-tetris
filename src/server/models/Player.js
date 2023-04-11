@@ -95,6 +95,22 @@ class Player {
         this.updateStage();
     }
 
+    verticalDrop() {
+        while (!this.checkCollision({x: 0, y: 1})) {
+            this.updatePlayerPos({
+                x: 0,
+                y: 1,
+                collided: false
+            });
+        }
+        if (this.pos.y < 1) {
+            console.log("Game over!");
+            this.status = PLAYER_STATUS.FINISHED;
+        }
+        this.updatePlayerPos({x: 0, y: 0, collided: true});
+        this.updateStage();
+    }
+
     move(dir) {
         if (!this.checkCollision({x: dir, y: 0})) {
             this.updatePlayerPos({

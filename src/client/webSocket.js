@@ -65,6 +65,10 @@ export default ({ children }) => {
     getSocketInstance().emit("event://mode-change", mode);
   }
 
+  const verticalDrop = () => {
+    getSocketInstance().emit("event://player-vertical-drop");
+  }
+
   const disconnect = () => {
     getSocketInstance().disconnect();
     resetSocketInstance();
@@ -122,6 +126,7 @@ export default ({ children }) => {
     playerRotate,
     playerJoin,
     changeMode,
+    verticalDrop,
     disconnect
   };
 

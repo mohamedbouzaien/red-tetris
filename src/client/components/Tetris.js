@@ -67,8 +67,11 @@ const Tetris = ({history, match}) => {
                 await ws.playerDrop();
             } else if (keyCode === 38) {
                 await ws.playerRotate(1);
+            } else if (keyCode === 32) {
+                await ws.verticalDrop();
             }
         }
+        console.log(keyCode);
     }
 
     useEffect(() => {
