@@ -75,6 +75,7 @@ io.on("connection", (socket) => {
     if (canStart === true) {
       console.log(canStart);
       room.isStarted = true;
+      room.gameOver = false;
       for (let [pkey, playerEnt] of room.players) {
         playerEnt.status = PLAYER_STATUS.PLAYING;
         playerEnt.reset();
@@ -144,6 +145,7 @@ io.on("connection", (socket) => {
     if (player.status === PLAYER_STATUS.FINISHED) {
       room.gameOver = true;
       room.calculateWinner();
+      room.chooseNewOwner();
     }
     const payload = {
       player,
@@ -213,6 +215,9 @@ io.on("connection", (socket) => {
     if (room.isStarted) {
       room.gameOver = true;
       room.calculateWinner();
+      room.chooseNewOwner();
+      room.isStarted = false;
+      console.log(room);
     }
     io.in(room.name).emit("event://player-out", {
       room : {

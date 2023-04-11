@@ -7,6 +7,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "cors": "^2.8.5",
+    "jest": "^27.5.1",
     "nodemon": "^2.0.21",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
@@ -27,7 +28,8 @@
     "server": "nodemon src/server/server.js",
     "build": "react-app-rewired build",
     "test": "react-app-rewired react-scripts test",
-    "eject": "react-app-rewired react-scripts eject"
+    "eject": "react-app-rewired react-scripts eject",
+    "coverage": "jest --watchAll"
   },
   "eslintConfig": {
     "extends": [
@@ -46,5 +48,30 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+	"jest": {
+		"moduleFileExtensions": [
+			"js",
+			"jsx"
+		],
+		"moduleDirectories": [
+			"node_modules"
+		],
+		"moduleNameMapper": {
+			"\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
+			"\\.(css|less)$": "<rootDir>/test/__mocks__/fileMock.js"
+		},
+		"setupFiles": [
+			"<rootDir>/test/setup.js"
+		],
+		"collectCoverage": true,
+		"coverageThreshold": {
+			"global": {
+				"statements": 70,
+				"functions": 70,
+				"lines": 70,
+				"branches": 50
+			}
+		}
   }
 }

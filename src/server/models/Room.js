@@ -46,6 +46,19 @@ class Room {
             this.players.set(winner.nickname, winner);
         }
     }
+
+    chooseNewOwner() {
+        if (this.players.size > 1) {
+            for (let [pkey, playerEnt] of this.players) {
+                if (playerEnt.status === PLAYER_STATUS.WIN) {
+                    this.ownerName = playerEnt.nickname;
+                    break;
+                }
+            }
+        } else {
+            this.ownerName = this.players.entries().next().value[1].nickname;
+        }
+    }
 }
 
 module.exports =  {Room, GAME_MODE};

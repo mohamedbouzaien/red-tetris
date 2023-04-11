@@ -30,7 +30,8 @@ export default function chatReducer(state = initialState, action) {
                     ...state,
                     player: action.payload.player,
                     room: action.payload.room,
-                    mode: action.payload.room.mode
+                    mode: action.payload.room.mode,
+                    gameOver: action.payload.room.gameOver
                 };
             }
             return {
@@ -62,7 +63,8 @@ export default function chatReducer(state = initialState, action) {
             return {
                 ...state,
                 room: action.payload.room,
-                isStarted: action.payload.room.isStarted
+                isStarted: action.payload.room.isStarted,
+                gameOver: action.payload.room.gameOver
             };
         
         case PLAYER_RESET:

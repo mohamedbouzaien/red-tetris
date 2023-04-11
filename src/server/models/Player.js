@@ -140,10 +140,12 @@ class Player {
 
     sweepRows() {
         const newStage = this.stage.reduce((ack, row) => {
-            if (row.findIndex(cell => cell[0] === 0 || cell[1] === 'sticked') === -1) {
-                this.rowsCleared++;
-                ack.unshift(new Array(this.stage[0].length).fill([0, 'clear']));
-                return ack;
+            if (row.findIndex(cell => cell[0] === 0) === -1) {
+                if (row[0][1] !== "sticked") {
+                    this.rowsCleared++;
+                    ack.unshift(new Array(this.stage[0].length).fill([0, 'clear']));
+                    return ack;
+                }
             }
             ack.push(row);
             return ack;
