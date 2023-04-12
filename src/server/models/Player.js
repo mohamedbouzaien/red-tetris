@@ -222,4 +222,4 @@ class Player {
         }
     }
 }
-module.exports = {Player, PLAYER_STATUS};
+module.exports = {Player, PLAYER_STATUS, HEART_STAGE};

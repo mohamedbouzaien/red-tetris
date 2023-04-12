@@ -9,7 +9,7 @@ import io from 'socket.io-mock';
 
 const mockStore = configureStore([]);
 
-describe('Chat', () => {
+describe('Chat component', () => {
   let ws;
   let store;
   let socket;
@@ -17,22 +17,22 @@ describe('Chat', () => {
   beforeEach(() => {
     socket = new io();
     const playerJoin = (roomName, nickName) => {
-        socket.socketClient.emit("event://player-join", {
-          roomName,
-          nickName
-        });
-      }
+      socket.socketClient.emit("event://player-join", {
+        roomName,
+        nickName
+      });
+    }
     const sendMessage = (roomId, message) => {
-    const payload = {
+      const payload = {
         roomId: roomId,
         data: message
-    };
-    socket.socketClient.emit("event://send-message", JSON.stringify(payload));
+      };
+      socket.socketClient.emit("event://send-message", JSON.stringify(payload));
     };
     ws = {
-        socket,
-        playerJoin,
-        sendMessage
+      socket,
+      playerJoin,
+      sendMessage
     }
     store = mockStore({
       username: '',

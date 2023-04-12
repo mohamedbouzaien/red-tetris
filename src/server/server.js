@@ -1,7 +1,7 @@
 const { GAME_MODE } = require('./models/Room');
 const {server, app} = require('./App');
 const { chatLogs, rooms } = require('./controllers/RoomController');
-const {Player, PLAYER_STATUS} = require('./models/Player');
+const {Player, PLAYER_STATUS, HEART_STAGE} = require('./models/Player');
 const Room = require('./models/Room');
 const io = require("socket.io")( server, {
   cors: {
@@ -25,6 +25,9 @@ io.on("connection", (socket) => {
       player = room.players.get(data.nickName);
       socket.join(room.name);
       if (player) {
+        if (room.mode === GAME_MODE.HEART) {
+          player.stage = HEART_STAGE;
+        }
         socket.emit('event://player-join', {
           player,
           room : {

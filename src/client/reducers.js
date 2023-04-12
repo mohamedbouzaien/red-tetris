@@ -19,7 +19,7 @@ export default function chatReducer(state = initialState, action) {
             console.log("got to CREATE_ROOM_SUCCESS reducer");
             return {
                 ...state,
-                room: action.payload
+                room: action.payload.room
             };
         
         case JOIN_ROOM_SUCCESS:

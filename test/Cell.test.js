@@ -8,7 +8,7 @@ afterEach(() => {
 	cleanup();
 });
 
-describe("<Cell/>", () => {
+describe("Cell component", () => {
 	it("black color when type is 0", () => {
 		const { container } = render(<Cell type={0} />);
 		expect(container.firstChild).toHaveStyleRule(

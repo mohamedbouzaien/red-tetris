@@ -24,7 +24,7 @@ const Tetris = ({history, match}) => {
     const gameMode = useSelector(state => state.mode);
     
     const startGame = async () => {
-        await ws.gameStart();
+        ws.gameStart();
         setDisabledButton(true);
         wrapperRef.current.focus();
     }
@@ -95,12 +95,15 @@ const Tetris = ({history, match}) => {
             setDisabledButton(true);
         } else {
             room?.players.forEach(p => {
-                if (p.status !== PLAYER_STATUS.READY && p.nickname !== room?.ownerName && room.ownerName === player.nickname)
+                if ((p.status !== PLAYER_STATUS.READY && p.nickname !== room?.ownerName && room.ownerName === player.nickname) || (
+                    player.status === PLAYER_STATUS.READY && room.ownerName !== player.nickname))
                     setDisabledButton(true);
-                else
+                else {
                     setDisabledButton(false);
+                }
             });
         }
+
         if (room?.ownerName !== player?.nickname) {
             setDisabledModeButton(true);
         }
@@ -140,7 +143,7 @@ const Tetris = ({history, match}) => {
                                     <Display text={`Level: ${player ? player.level : 0}`} />
                                 </div>
                                 )}
-                                <StartButton disabled={disabledButton} text={room && player && room.ownerName === player.nickname ? "Start" : "Ready" } callback={startGame}/>
+                                <StartButton disabled={disabledButton} text={room && player && room.ownerName === player.nickname ? "Start" : "Ready" } callback={startGame} data-testid="start-game-button"/>
                                 <StartButton disabled={false} text={ "QUIT" } callback={quit}/>
                             </aside>
 

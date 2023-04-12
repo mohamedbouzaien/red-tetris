@@ -17,12 +17,6 @@ export const RESET_STATE = "RESET_STATE";
 export const PLAYER_OUT = "PLAYER_OUT";
 export const CHANGE_MODE = "CHANGE_MODE";
 
-export function createRoomRequest() {
-    return {
-        type: CREATE_ROOM_REQUEST
-    }
-}
-
 export function createRoomSuccess(payload) {
     return {
         type: CREATE_ROOM_SUCCESS,
@@ -30,66 +24,10 @@ export function createRoomSuccess(payload) {
     }
 }
 
-export function createRoomError(error) {
-    return {
-        type: CREATE_ROOM_ERROR,
-        error
-    }
-}
-
-export function createRoom(roomName) {
-    return async function (dispatch) {
-        dispatch(createRoomRequest());
-        await fetch(`http://localhost:3004/room?name=${roomName}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then((res) =>
-            res.json()
-        ).then((result) => {
-            dispatch(createRoomSuccess(result));
-        }).catch((error) => {
-            dispatch(createRoomError(error));
-        })
-    }
-}
-
-export function joinRoomRequest(){
-    return {
-        type: JOIN_ROOM_REQUEST
-    }
-}
-
 export function joinRoomSuccess(payload){
     return {
         type: JOIN_ROOM_SUCCESS,
         payload
-    }
-}
-
-export function joinRoomError(error){
-    return {
-        type: JOIN_ROOM_ERROR,
-        error
-    }
-}
-
-export function joinRoom(roomId, username) {
-    return async function (dispatch) {
-        dispatch(joinRoomRequest());
-        await fetch(`http://localhost:3004/api/room?name=${roomId}&username=${username}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then((res) =>
-            res.json()
-        ).then((result) => {
-            //dispatch(joinRoomSuccess(result));
-        }).catch((error) => {
-            dispatch(joinRoomError(error));
-        })
     }
 }
 

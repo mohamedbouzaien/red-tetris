@@ -8,7 +8,7 @@ afterEach(() => {
 	cleanup();
 });
 
-describe("<Cell/>", () => {
+describe("Display component", () => {
 	it("black color when type is 0", () => {
 		const { container } = render(<Display gameOver={true} />);
 		expect(container.firstChild).toHaveStyleRule(

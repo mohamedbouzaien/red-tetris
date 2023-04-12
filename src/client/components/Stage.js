@@ -5,6 +5,10 @@ import { StyledStage } from "./styles/StyledStage";
 import { StyledStatus } from "./styles/StyledStatus";
 import { PLAYER_STATUS, createStage } from "../gamehelpers";
 
+global.setImmediate = global.setImmediate || function(fn) {
+    return setTimeout(fn, 0);
+  };
+
 const Stage = ({ stage, scale, status }) => {
     const [message, setMessage] = useState("");
     if (!stage) {
