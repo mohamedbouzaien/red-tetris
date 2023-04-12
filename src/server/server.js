@@ -76,6 +76,20 @@ io.on("connection", (socket) => {
     }
     if (canStart === true) {
       room.isStarted = true;
+      if (room.gameOver === true) {
+        for (let [pkey, playerEnt] of room.players) {
+          playerEnt.status = PLAYER_STATUS.READY;
+          playerEnt.tetroId = -1;
+          playerEnt.reset();
+          if (room.mode === GAME_MODE.HEART) {
+            playerEnt.stage = HEART_STAGE;
+          } else {
+            playerEnt.createStage();
+          }
+          if (playerEnt.nickname === player.nickname)
+            player = playerEnt;
+        }
+      }
       room.gameOver = false;
       for (let [pkey, playerEnt] of room.players) {
         playerEnt.status = PLAYER_STATUS.PLAYING;
@@ -146,6 +160,7 @@ io.on("connection", (socket) => {
       room.gameOver = true;
       room.calculateWinner();
       room.chooseNewOwner();
+      room.isStarted = false;
     }
     const payload = {
       player,
@@ -174,6 +189,7 @@ io.on("connection", (socket) => {
       room.gameOver = true;
       room.calculateWinner();
       room.chooseNewOwner();
+      room.isStarted = false;
     }
     const payload = {
       player,

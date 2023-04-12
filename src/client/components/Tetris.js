@@ -91,14 +91,16 @@ const Tetris = ({history, match}) => {
             setDisabledModeButton(true);
             setDisabledButton(true);
         } else {
+            setDisabledButton(false);
             room?.players.forEach(p => {
-                if ((p.status !== PLAYER_STATUS.READY && p.nickname !== room?.ownerName && room.ownerName === player.nickname) || (
-                    player.status === PLAYER_STATUS.READY && room.ownerName !== player.nickname))
-                    setDisabledButton(true);
-                else {
-                    setDisabledButton(false);
+                if (p.status !== PLAYER_STATUS.READY && p.nickname !== room?.ownerName && room.ownerName === player.nickname) {
+                        console.log("goes to true")
+                        setDisabledButton(true);
                 }
             });
+            if (player?.status === PLAYER_STATUS.READY && room?.ownerName !== player?.nickname) {
+                setDisabledButton(true);
+            }
         }
 
         if (room?.ownerName !== player?.nickname) {
