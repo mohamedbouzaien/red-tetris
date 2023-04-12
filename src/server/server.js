@@ -80,6 +80,12 @@ io.on("connection", (socket) => {
         for (let [pkey, playerEnt] of room.players) {
           playerEnt.status = PLAYER_STATUS.READY;
           playerEnt.tetroId = -1;
+          playerEnt.score = 0;
+          playerEnt.rows = 0;
+          playerEnt.level = 0;
+          playerEnt.dropTime = 1000;
+          playerEnt.speedMode = false;
+          playerEnt.rowsCleared = 0;
           playerEnt.reset();
           if (room.mode === GAME_MODE.HEART) {
             playerEnt.stage = HEART_STAGE;

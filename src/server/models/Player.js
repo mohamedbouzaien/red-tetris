@@ -60,12 +60,6 @@ class Player {
         };
         this.tetromino = this.tetrominos[this.tetroId];
         this.collided = false;
-        this.score = 0;
-        this.rows = 0;
-        this.level = 0;
-        this.dropTime = 1000;
-        this.speedMode = false;
-        this.rowsCleared = 0;
     }
 
     playerRotate(dir) {

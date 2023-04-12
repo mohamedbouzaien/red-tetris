@@ -94,7 +94,6 @@ const Tetris = ({history, match}) => {
             setDisabledButton(false);
             room?.players.forEach(p => {
                 if (p.status !== PLAYER_STATUS.READY && p.nickname !== room?.ownerName && room.ownerName === player.nickname) {
-                        console.log("goes to true")
                         setDisabledButton(true);
                 }
             });
@@ -134,7 +133,10 @@ const Tetris = ({history, match}) => {
                             </div>
                             <aside>
                                 {gameOver ? (
-                                    <Display gameOver={gameOver} text="Game Over" />
+                                    <div>
+                                        <Display text={`Score: ${player ? player.score : 0}`} />
+                                        <Display gameOver={gameOver} text="Game Over" />
+                                    </div>
                                 ) : (
                                 <div>
                                     <Display text={`Score: ${player ? player.score : 0}`} />
