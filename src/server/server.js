@@ -70,13 +70,11 @@ io.on("connection", (socket) => {
       canStart = false;
     }
     for (let [pkey, playerEnt] of room.players) {
-      console.log(playerEnt.nickname, " ", playerEnt.status);
       if (playerEnt.status !== PLAYER_STATUS.READY) {
         canStart = false;
       }
     }
     if (canStart === true) {
-      console.log(canStart);
       room.isStarted = true;
       room.gameOver = false;
       for (let [pkey, playerEnt] of room.players) {
@@ -86,7 +84,6 @@ io.on("connection", (socket) => {
         if (playerEnt.nickname === player.nickname)
           player = playerEnt;
       }
-      console.log("Game start: ");
     }
     socket.emit("event://player-ready", {
       player,
@@ -248,7 +245,6 @@ io.on("connection", (socket) => {
       room.calculateWinner();
       room.chooseNewOwner();
       room.isStarted = false;
-      console.log(room);
     }
     io.in(room.name).emit("event://player-out", {
       room : {
