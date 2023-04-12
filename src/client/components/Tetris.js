@@ -67,7 +67,6 @@ const Tetris = ({history, match}) => {
                 await ws.verticalDrop();
             }
         }
-        console.log(keyCode);
     }
 
     useEffect(() => {
@@ -82,14 +81,12 @@ const Tetris = ({history, match}) => {
 
     useEffect(() => {
         return() => {
-            console.log("socket disconnect");
             ws.disconnect();
         }
     }, []);
 
     useEffect(() => {
         if (room?.isStarted === true) {
-            console.log("Git to set Time");
             setDropTime(player?.dropTime);
             setDisabledModeButton(true);
             setDisabledButton(true);

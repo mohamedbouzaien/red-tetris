@@ -23,7 +23,6 @@ const resetSocketInstance = () => {
 export default ({ children }) => {
   const socket = useRef(null);
   const dispatch = useDispatch();
-    console.log("rerenders the webSocketContext component");
   const sendMessage = (roomId, message) => {
     const payload = {
       roomId: roomId,
@@ -102,15 +101,12 @@ export default ({ children }) => {
       dispatch(playerReadyAction(payload));
     });
     socketInstance.on("disconnect", () => {
-      console.log("Disconnected from socket");
       dispatch(resetStateAction());
     });
     socketInstance.on("event://player-out", (payload) => {
-      console.log("player out event");
       dispatch(playerOutAction(payload));
     });
     socketInstance.on("event://mode-change", (mode) => {
-      console.log("mode change", mode);
       dispatch(changeModeAction(mode));
     })
   

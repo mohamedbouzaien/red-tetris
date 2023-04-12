@@ -87,7 +87,6 @@ class Player {
             });
         } else {
             if (this.pos.y < 1) {
-                console.log("Game over!");
                 this.status = PLAYER_STATUS.FINISHED;
             }
             this.updatePlayerPos({x: 0, y: 0, collided: true});
@@ -104,7 +103,6 @@ class Player {
             });
         }
         if (this.pos.y < 1) {
-            console.log("Game over!");
             this.status = PLAYER_STATUS.FINISHED;
         }
         this.updatePlayerPos({x: 0, y: 0, collided: true});

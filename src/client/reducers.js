@@ -16,15 +16,12 @@ const initialState = {
 export default function chatReducer(state = initialState, action) {
     switch(action.type) {
         case CREATE_ROOM_SUCCESS:
-            console.log("got to CREATE_ROOM_SUCCESS reducer");
             return {
                 ...state,
                 room: action.payload.room
             };
         
         case JOIN_ROOM_SUCCESS:
-            console.log("got to JOIN_ROOM_SUCCESS reducer");
-            console.log(JSON.stringify(action.payload.players));
             if (action.payload.player) {
                 return {
                     ...state,
@@ -40,15 +37,12 @@ export default function chatReducer(state = initialState, action) {
             };
 
         case SET_USERNAME:
-            console.log("got to SET_USERNAME reducer");
             return {
                 ...state,
                 username: action.username
             };
         
         case UPDATE_CHAT_LOG:
-            console.log("got to UPDATE_CHAT_LOG reducer");
-            console.log(state);
             if (state.room !== null && action.update.roomId === state.room.name) {
                 return {
                     ...state,
@@ -58,8 +52,6 @@ export default function chatReducer(state = initialState, action) {
             return state;
         
         case GAME_START:
-            console.log("got GAME_START reducer");
-            console.log(action.player);
             return {
                 ...state,
                 room: action.payload.room,
@@ -68,7 +60,6 @@ export default function chatReducer(state = initialState, action) {
             };
         
         case PLAYER_RESET:
-            console.log("got RESET_PLAYER reducer");
             return {
                 ...state,
                 player: action.payload.player,
@@ -76,7 +67,6 @@ export default function chatReducer(state = initialState, action) {
             };
         
         case PLAYER_MOVE:
-            console.log("got PLAYER_MOVE reducer");
             return {
                 ...state,
                 player: action.payload.player,
@@ -84,7 +74,6 @@ export default function chatReducer(state = initialState, action) {
             };
         
         case PLAYER_DROP:
-            console.log("got PLAYER_DROP reducer");
             return {
                 ...state,
                 player: action.payload.player,
@@ -93,7 +82,6 @@ export default function chatReducer(state = initialState, action) {
             };
         
         case PLAYER_ROTATE:
-            console.log("got PLAYER_ROTATE reducer");
             return {
                 ...state,
                 player: action.payload.player,
