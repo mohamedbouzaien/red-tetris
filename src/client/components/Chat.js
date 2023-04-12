@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { WebSocketContext } from "../webSocket";
-import { joinRoom, setUsername } from "../actions";
+import { setUsername } from "../actions";
 import { StyledChatHistoryDiv } from "./styles/StyledChatHistoryDiv";
 
 const Chat = ({history, match}) => {
@@ -38,8 +38,8 @@ const Chat = ({history, match}) => {
                     ))}
                 </StyledChatHistoryDiv>
                 <div role="button" tabIndex="0" onKeyDown={ e => dispatchKey(e)}>
-                    <input style={{width: "78%", marginLeft: "10px"}} type="text" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)}/>
-                    <button onClick={sendMessage} style={{backgroundColor: "grey"}}>&#9658;</button>
+                    <input style={{width: "78%", marginLeft: "10px"}} type="text" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} placeholder="Your message..."/>
+                    <button onClick={sendMessage} style={{backgroundColor: "grey"}} data-testid="chat-send-button">&#9658;</button>
                 </div>
             </div>
             }

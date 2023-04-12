@@ -2,7 +2,6 @@ import React from "react";
 import SignUpForm from "./components/SignUpForm";
 import { HashRouter, Route } from "react-router-dom";
 import Game from "./components/Game";
-import Tetris from "./components/Tetris";
 
 const App = () => (
   <div className="App">

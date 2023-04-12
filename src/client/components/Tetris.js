@@ -3,15 +3,11 @@ import Stage from "./Stage";
 import Display from "./Display";
 import StartButton from "./StartButton";
 import Chat from "./Chat";
-import WebSocketProvider, { WebSocketContext } from '../webSocket';
-import { Provider, useSelector } from "react-redux";
+import { WebSocketContext } from '../webSocket';
+import { useSelector } from "react-redux";
 import { StyledTetris, StyledTetrisWrapper } from "./styles/StyledTetris";
-import { useStage } from "../hooks/useStage";
-import { GAME_MODE, PLAYER_STATUS, createStage } from "../gamehelpers";
+import { GAME_MODE, PLAYER_STATUS } from "../gamehelpers";
 import { useInterval } from "../hooks/useInterval";
-import store from "../store";
-import { randomTetromino } from "../tetrominos";
-import io from "socket.io-client";
 import { StyledOtherTetrises } from "./styles/StyledOtherTetrises";
 import { StyledModeDiv, StyledArrowButtons, StyledModeBoxDiv } from "./styles/StyledModeDiv";
 

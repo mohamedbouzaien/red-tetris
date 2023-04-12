@@ -8,8 +8,7 @@ import { StyledInputDiv } from "./styles/StyledInputDiv";
 import { StyledLogo } from "./styles/StyledLogo";
 import { StyledLogoWrapper } from "./styles/StyledLogoWrapper";
 import { StyledErrorMessage } from "./styles/StyledErrorMessage";
-import { setUsername } from "../actions";
-import { useDispatch } from "react-redux";
+
 const SignUpForm = ({ history }) => {
     const [inputs, setInputs] = useState({
         room: "",
@@ -69,16 +68,16 @@ const SignUpForm = ({ history }) => {
             <StyledFormWrapper>
                 <form onSubmit={ handleSubmit }>
                     <StyledInputDiv>
-                        <StyledInputLabel>
+                        <StyledInputLabel htmlFor="room">
                             Room:
                         </StyledInputLabel>
-                        <StyledInput type="text" name="room" value={room} onChange={ handleChange }/>
+                        <StyledInput type="text" name="room" id="room" value={room} onChange={ handleChange }/>
                     </StyledInputDiv>
                     <StyledInputDiv>
-                        <StyledInputLabel>
+                        <StyledInputLabel htmlFor="nickname">
                             Nickname:
                         </StyledInputLabel>
-                        <StyledInput type="text" name="nickname" value={nickname} onChange= { handleChange }/>
+                        <StyledInput type="text" name="nickname" id="nickname" value={nickname} onChange= { handleChange }/>
                     </StyledInputDiv>
                     <StyledInputDiv>
                         <StyledSignupButton type="submit" value="Start" />

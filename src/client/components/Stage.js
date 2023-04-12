@@ -23,11 +23,11 @@ const Stage = ({ stage, scale, status }) => {
     }, [status]);
     return(
         
-        <StyledStage width={stage[0].length} height={stage.length} scale={scale}>
+        <StyledStage width={stage[0].length} height={stage.length} scale={scale} data-testid="stage">
         {
             stage.map(row => row.map((cell, x) => <Cell key={x} type={cell[0]}/>))
         }
-            <StyledStatus scale={scale}>{message}</StyledStatus>
+            <StyledStatus scale={scale} data-testid="status-message">{message}</StyledStatus>
         </StyledStage>
     )};
 export default Stage;

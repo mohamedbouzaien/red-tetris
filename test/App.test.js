@@ -1,4 +1,4 @@
-import { render, waitForElement } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 import App from '../src/client/App';
 import "@testing-library/jest-dom/extend-expect";
@@ -11,7 +11,7 @@ describe("AppRouter component", () => {
     const history = createHashHistory({ initialEntries: ["/"] });
     history.push("/#room[player]");
     const { container, getByText, debug } = render(<App />);
-    await waitForElement(() => getByText(/Component Two/i));
+    await waitFor(() => getByText(/RED/i));
     debug();
   });
 });
